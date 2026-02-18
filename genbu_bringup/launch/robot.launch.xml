@@ -1,3 +1,6 @@
 <launch>
-
+  <include file="$(find create_bringup)/launch/create_2.launch" />
+  <include file="$(find create_bringup)/launch/joy_teleop.launch">
+    <arg name="joy_config" value="dualshock4" />
+  </include>
 </launch>

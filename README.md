@@ -5,7 +5,7 @@
 
 Genbu is my personal ROS development platform built on the iRobot Create 2.
 
-Named after the Black Tortoise of Chinese myth, an homage to turtlebot, Genbu represent endurance and longevity and in some folklore the virtue of knowledge, perfect for a platform to learn robotics!
+Named after the Black Tortoise of Chinese myth, an homage to turtlebot, Genbu represents endurance and longevity and in some folklore the virtue of knowledge, perfect for a platform to learn robotics!
 
 # Packages
 
