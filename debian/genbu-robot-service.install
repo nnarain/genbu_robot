@@ -1,0 +1,2 @@
+debian/genbu-robot-start usr/bin/
+debian/genbu-robot etc/default/

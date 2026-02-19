@@ -1,0 +1,39 @@
+# ROS / colcon workspace outputs
+build/
+install/
+log/
+
+# CMake / Make
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+Makefile
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Debian packaging build artifacts
+*.deb
+*.udeb
+*.ddeb
+*.build
+*.buildinfo
+*.changes
+*.dsc
+*.tar.*
+*.debian.tar.*
+
+# debhelper outputs
+/debian/.debhelper/
+/debian/debhelper-build-stamp
+/debian/files
+/debian/*.substvars
+/debian/*.debhelper
