@@ -24,12 +24,14 @@ jobs:
       - name: Build Debian package
         run: |
           dpkg-buildpackage -us -uc -b
+          mkdir -p dist
+          mv ../*.deb dist/
 
       - name: Upload package as workflow artifact
         uses: actions/upload-artifact@v4
         with:
           name: debian-package
-          path: ../*.deb
+          path: dist/*.deb
 
       - name: Publish package to GitHub Release
         uses: softprops/action-gh-release@v2
@@ -38,4 +40,4 @@ jobs:
           name: Debian Latest
           prerelease: true
           files: |
-            ../*.deb
+            dist/*.deb
