@@ -5,6 +5,7 @@ GENBU_DOCKER_PULL=always
 GENBU_DOCKER_NETWORK=host
 GENBU_DOCKER_PRIVILEGED=true
 GENBU_DOCKER_DEVICE=/dev/ttyUSB0
+GENBU_DOCKER_JOYSTICK=/dev/input/js0
 # Optional extra argument, for example:
 # GENBU_DOCKER_EXTRA_ARG=--device=/dev/ttyACM0:/dev/ttyACM0
 GENBU_DOCKER_EXTRA_ARG=

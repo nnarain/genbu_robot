@@ -37,3 +37,4 @@ __pycache__/
 /debian/files
 /debian/*.substvars
 /debian/*.debhelper
+/debian/genbu-robot/

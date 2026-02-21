@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    configure)
+        if [ -d /run/systemd/system ]; then
+            systemctl enable bluetooth || true
+            systemctl start bluetooth || true
+        fi
+        ;;
+esac
+
+#DEBHELPER#
