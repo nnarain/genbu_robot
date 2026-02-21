@@ -1,3 +1,13 @@
+genbu-robot (0.2.0-1) unstable; urgency=medium
+
+  * Rename package from genbu-robot-service to genbu-robot.
+  * Rename systemd service from genbu-robot-service to robot.
+  * Add Bluetooth gamepad dependencies: bluetooth, bluez, bluez-tools, joystick.
+  * Enable and start bluetooth service on package installation.
+  * Pass joystick device through to the Docker container.
+
+ -- Genbu Robot Maintainers <maintainers@example.com>  Sat, 21 Feb 2026 00:00:00 +0000
+
 genbu-robot-service (0.1.0-1) unstable; urgency=medium
 
   * Initial package: install systemd service to launch Genbu robot container.

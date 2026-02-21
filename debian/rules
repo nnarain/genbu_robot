@@ -2,3 +2,12 @@
 
 %:
 	dh $@
+
+override_dh_install:
+	install -D -m 644 debian/genbu-robot-defaults \
+		debian/genbu-robot/etc/default/genbu-robot
+	install -D -m 755 debian/genbu-robot-start \
+		debian/genbu-robot/usr/bin/genbu-robot-start
+
+override_dh_installsystemd:
+	dh_installsystemd --name=robot
