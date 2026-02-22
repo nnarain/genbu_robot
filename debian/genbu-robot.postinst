@@ -6,6 +6,8 @@ case "$1" in
         if [ -d /run/systemd/system ]; then
             systemctl enable bluetooth || true
             systemctl start bluetooth || true
+            systemctl enable avahi-daemon || true
+            systemctl start avahi-daemon || true
         fi
         ;;
 esac
