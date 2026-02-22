@@ -1,6 +1,6 @@
 <launch>
-  <include file="$(find create_bringup)/launch/create_2.launch" />
-  <include file="$(find create_bringup)/launch/joy_teleop.launch">
-    <arg name="joy_config" value="dualshock4" />
+  <include file="$(find-pkg-share create_bringup)/launch/create_2.launch" />
+  <include file="$(find-pkg-share teleop_twist_joy)/launch/teleop-launch.py" >
+    <arg name="joy_config" value="ps4" />
   </include>
 </launch>

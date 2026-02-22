@@ -23,7 +23,8 @@ RUN rm -rf /ros_ws/build /ros_ws/install /ros_ws/log \
 
 RUN cd /ros_ws/src \
     && if [ ! -d create_robot ]; then git clone https://github.com/nnarain/create_robot.git; fi \
-    && if [ ! -d libcreate ]; then git clone https://github.com/nnarain/libcreate.git; fi
+    && if [ ! -d libcreate ]; then git clone https://github.com/nnarain/libcreate.git; fi \
+    && if [ ! -d teleop_twist_joy ]; then git clone https://github.com/nnarain/teleop_twist_joy.git --branch ds4-config; fi
 
 RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi \
     && rosdep update \
