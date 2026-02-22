@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN mkdir -p /ros_ws/src/genbu_robot
 COPY . /ros_ws/src/genbu_robot
 
+RUN rm -rf /ros_ws/build /ros_ws/install /ros_ws/log \
+    /ros_ws/src/genbu_robot/build /ros_ws/src/genbu_robot/install /ros_ws/src/genbu_robot/log
+
 RUN cd /ros_ws/src \
     && if [ ! -d create_robot ]; then git clone https://github.com/nnarain/create_robot.git; fi \
     && if [ ! -d libcreate ]; then git clone https://github.com/nnarain/libcreate.git; fi
@@ -40,4 +43,4 @@ RUN echo "source /ros_ws/install/setup.bash" >> ~/.bashrc
 # Set working directory
 WORKDIR /ros_ws
 
-CMD ["/bin/bash", "-lc", "source /opt/ros/${ROS_DISTRO}/setup.bash && source /ros_ws/install/setup.bash && ros2 launch genbu_bringup robot.launch.xml"]
+CMD ["/bin/bash", "-lc", "source /opt/ros/${ROS_DISTRO}/setup.bash && export COLCON_CURRENT_PREFIX=/ros_ws/install && source /ros_ws/install/setup.bash && ros2 launch genbu_bringup robot.launch.xml"]
