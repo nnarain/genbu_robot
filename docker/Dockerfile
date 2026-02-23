@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1-labs
 ARG ROS_DISTRO=jazzy
 
 FROM ros:${ROS_DISTRO}
