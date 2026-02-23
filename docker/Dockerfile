@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1-labs
 ARG ROS_DISTRO=jazzy
 
 FROM ros:${ROS_DISTRO}
@@ -13,24 +14,29 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nano \
     && rm -rf /var/lib/apt/lists/*
 
+# Clone external dependencies (cached unless this layer changes)
+RUN mkdir -p /ros_ws/src \
+    && cd /ros_ws/src \
+    && git clone https://github.com/nnarain/create_robot.git \
+    && git clone https://github.com/nnarain/libcreate.git \
+    && git clone https://github.com/nnarain/teleop_twist_joy.git --branch ds4-config
 
-# Build workspace from genbu_robot source root (Docker build context: this repo)
+# Copy only package.xml files first so the rosdep layer is cached unless dependencies change
 RUN mkdir -p /ros_ws/src/genbu_robot
-COPY . /ros_ws/src/genbu_robot
-
-RUN rm -rf /ros_ws/build /ros_ws/install /ros_ws/log \
-    /ros_ws/src/genbu_robot/build /ros_ws/src/genbu_robot/install /ros_ws/src/genbu_robot/log
-
-RUN cd /ros_ws/src \
-    && if [ ! -d create_robot ]; then git clone https://github.com/nnarain/create_robot.git; fi \
-    && if [ ! -d libcreate ]; then git clone https://github.com/nnarain/libcreate.git; fi \
-    && if [ ! -d teleop_twist_joy ]; then git clone https://github.com/nnarain/teleop_twist_joy.git --branch ds4-config; fi
+COPY --parents */package.xml /ros_ws/src/genbu_robot/
 
 RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi \
     && rosdep update \
     && apt-get update \
     && cd /ros_ws \
-    && rosdep install --from-paths src --ignore-src -r -y
+    && rosdep install --from-paths src --ignore-src -r -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy the full source and build (this layer re-runs on source changes)
+COPY . /ros_ws/src/genbu_robot
+
+RUN rm -rf /ros_ws/build /ros_ws/install /ros_ws/log \
+    /ros_ws/src/genbu_robot/build /ros_ws/src/genbu_robot/install /ros_ws/src/genbu_robot/log
 
 RUN cd /ros_ws \
     && . /opt/ros/${ROS_DISTRO}/setup.sh \
