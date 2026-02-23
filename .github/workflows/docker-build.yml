@@ -58,3 +58,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             ROS_DISTRO=${{ matrix.ros_distro }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
