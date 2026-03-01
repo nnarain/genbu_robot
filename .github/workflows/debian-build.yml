@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install Debian build dependencies
         run: |
@@ -27,17 +29,29 @@ jobs:
           mkdir -p dist
           mv ../*.deb dist/
 
+          DEB_PATH=$(find dist -maxdepth 1 -type f -name 'genbu-robot_*.deb' ! -name '*dbgsym*' | head -n 1)
+          if [ -z "$DEB_PATH" ]; then
+            echo "No installable Debian package found in dist/"
+            exit 1
+          fi
+
+          ARCH=$(dpkg-deb --field "$DEB_PATH" Architecture)
+          cp "$DEB_PATH" "dist/genbu-robot-latest_${ARCH}.deb"
+
       - name: Upload package as workflow artifact
         uses: actions/upload-artifact@v4
         with:
           name: debian-package
-          path: dist/*.deb
+          path: dist/genbu-robot-latest_*.deb
 
       - name: Publish package to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: debian-latest
+          target_commitish: develop
           name: Debian Latest
-          prerelease: true
+          prerelease: false
+          make_latest: true
+          overwrite_files: true
           files: |
-            dist/*.deb
+            dist/genbu-robot-latest_*.deb
