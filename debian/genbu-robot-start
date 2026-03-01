@@ -6,8 +6,6 @@ GENBU_CONTAINER_NAME="${GENBU_CONTAINER_NAME:-genbu-robot}"
 GENBU_DOCKER_PULL="${GENBU_DOCKER_PULL:-always}"
 GENBU_DOCKER_NETWORK="${GENBU_DOCKER_NETWORK:-host}"
 GENBU_DOCKER_PRIVILEGED="${GENBU_DOCKER_PRIVILEGED:-true}"
-GENBU_DOCKER_DEVICE="${GENBU_DOCKER_DEVICE:-/dev/ttyUSB0}"
-GENBU_DOCKER_JOYSTICK="${GENBU_DOCKER_JOYSTICK:-/dev/input/js0}"
 GENBU_DOCKER_EXTRA_ARG="${GENBU_DOCKER_EXTRA_ARG:-}"
 
 if [[ "${GENBU_DOCKER_PULL}" == "always" ]]; then
@@ -28,13 +26,7 @@ if [[ "${GENBU_DOCKER_PRIVILEGED}" == "true" ]]; then
   docker_args+=(--privileged)
 fi
 
-if [[ -n "${GENBU_DOCKER_DEVICE}" ]]; then
-  docker_args+=(--device "${GENBU_DOCKER_DEVICE}:${GENBU_DOCKER_DEVICE}")
-fi
-
-if [[ -n "${GENBU_DOCKER_JOYSTICK}" ]] && [[ -e "${GENBU_DOCKER_JOYSTICK}" ]]; then
-  docker_args+=(--device "${GENBU_DOCKER_JOYSTICK}:${GENBU_DOCKER_JOYSTICK}")
-fi
+docker_args+=(--volume /dev:/dev)
 
 if [[ -n "${GENBU_DOCKER_EXTRA_ARG}" ]]; then
   docker_args+=("${GENBU_DOCKER_EXTRA_ARG}")
