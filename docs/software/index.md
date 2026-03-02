@@ -4,12 +4,44 @@ Software documentation.
 
 ## Deployment
 
-https://github.com/nnarain/genbu_robot/issues/20
+### Ansible (recommended)
 
-Install Raspberry Pi OS Lite on an SD card
+The `ansible/` directory in this repository contains a playbook that provisions a clean Raspberry Pi OS image with everything needed to run the Genbu robot software stack.
 
+**Prerequisites (on your local machine)**
 
-ssh into the Raspberry Pi
+```bash
+pip install ansible
+```
+
+**Steps**
+
+1. Flash [Raspberry Pi OS Lite](https://www.raspberrypi.com/software/) onto an SD card and boot the Pi.
+
+2. Edit `ansible/inventory.yml` and set the correct IP address for your Raspberry Pi:
+
+```yaml
+all:
+  hosts:
+    genbu:
+      ansible_host: 192.168.1.100  # replace with your Raspberry Pi's IP address
+      ansible_user: robot
+```
+
+3. Run the provisioning playbook from the repository root:
+
+```bash
+ansible-playbook -i ansible/inventory.yml ansible/provision.yml --ask-become-pass
+```
+
+The playbook will:
+
+- Install Docker Engine
+- Download and install the latest `genbu-robot` Debian package from GitHub releases
+
+### Manual installation
+
+Install Raspberry Pi OS Lite on an SD card and ssh into the Pi:
 
 ```bash
 ssh robot@<raspberry-ip>

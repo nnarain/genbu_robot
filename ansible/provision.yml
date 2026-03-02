@@ -1,0 +1,82 @@
+---
+- name: Provision Raspberry Pi for Genbu Robot
+  hosts: all
+  become: true
+
+  tasks:
+    # --- Docker ---
+
+    - name: Install Docker prerequisites
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+        state: present
+        update_cache: true
+
+    - name: Create /etc/apt/keyrings directory
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+
+    - name: Download Docker GPG key
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/debian/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: "0644"
+
+    - name: Get Debian architecture
+      ansible.builtin.command: dpkg --print-architecture
+      register: deb_arch
+      changed_when: false
+
+    - name: Get Debian version codename
+      ansible.builtin.shell:
+        cmd: ". /etc/os-release && echo $VERSION_CODENAME"
+      register: deb_codename
+      changed_when: false
+
+    - name: Add Docker apt repository
+      ansible.builtin.apt_repository:
+        repo: >-
+          deb [arch={{ deb_arch.stdout }} signed-by=/etc/apt/keyrings/docker.asc]
+          https://download.docker.com/linux/debian
+          {{ deb_codename.stdout }} stable
+        filename: docker
+        state: present
+
+    - name: Install Docker Engine
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: true
+
+    - name: Enable and start Docker service
+      ansible.builtin.systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Add ansible_user to docker group
+      ansible.builtin.user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: true
+
+    # --- Genbu Robot Debian package ---
+
+    - name: Download latest genbu-robot Debian package
+      ansible.builtin.get_url:
+        url: >-
+          https://github.com/nnarain/genbu_robot/releases/download/debian-latest/genbu-robot-latest_{{ deb_arch.stdout }}.deb
+        dest: /tmp/genbu-robot.deb
+        mode: "0644"
+
+    - name: Install genbu-robot Debian package
+      ansible.builtin.apt:
+        deb: /tmp/genbu-robot.deb
+        state: present
