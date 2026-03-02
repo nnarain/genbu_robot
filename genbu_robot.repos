@@ -1,0 +1,13 @@
+repositories:
+  nnarain/create_robot:
+    type: git
+    url: https://github.com/nnarain/create_robot.git
+    version: jazzy
+  nnarain/libcreate:
+    type: git
+    url: https://github.com/nnarain/libcreate.git
+    version: master
+  nnarain/teleop_twist_joy:
+    type: git
+    url: https://github.com/nnarain/teleop_twist_joy.git
+    version: ds4-config

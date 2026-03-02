@@ -14,12 +14,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nano \
     && rm -rf /var/lib/apt/lists/*
 
-# Clone external dependencies (cached unless this layer changes)
+# Clone external dependencies (cached unless repos file changes)
+COPY genbu_robot.repos /ros_ws/
 RUN mkdir -p /ros_ws/src \
-    && cd /ros_ws/src \
-    && git clone https://github.com/nnarain/create_robot.git \
-    && git clone https://github.com/nnarain/libcreate.git \
-    && git clone https://github.com/nnarain/teleop_twist_joy.git --branch ds4-config
+    && cd /ros_ws \
+    && vcs import src < genbu_robot.repos
 
 # Copy only package.xml files first so the rosdep layer is cached unless dependencies change
 RUN mkdir -p /ros_ws/src/genbu_robot
