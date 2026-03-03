@@ -1,0 +1,15 @@
+---
+# Requires: deb_arch variable (stdout of `dpkg --print-architecture`) registered by the calling playbook.
+- name: Download latest genbu-robot Debian package
+  ansible.builtin.get_url:
+    url: >-
+      https://github.com/nnarain/genbu_robot/releases/download/debian-latest/genbu-robot-latest_{{ deb_arch.stdout }}.deb
+    dest: /tmp/genbu-robot.deb
+    mode: "0644"
+    # force=true ensures the latest release is always fetched, since the URL and filename never change.
+    force: true
+
+- name: Install genbu-robot Debian package
+  ansible.builtin.apt:
+    deb: /tmp/genbu-robot.deb
+    state: present

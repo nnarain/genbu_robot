@@ -1,0 +1,19 @@
+---
+- name: Update genbu-robot Debian package to latest
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Get Debian architecture
+      ansible.builtin.command: dpkg --print-architecture
+      register: deb_arch
+      changed_when: false
+
+    - name: Remove existing genbu-robot Debian package
+      ansible.builtin.apt:
+        name: genbu-robot
+        # state: absent removes the package but preserves configuration files.
+        state: absent
+
+    - name: Install latest genbu-robot Debian package
+      ansible.builtin.import_tasks: tasks/install_genbu_robot.yml
