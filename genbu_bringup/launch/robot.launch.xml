@@ -3,4 +3,9 @@
   <include file="$(find-pkg-share teleop_twist_joy)/launch/teleop-launch.py" >
     <arg name="joy_config" value="ps4" />
   </include>
+
+  <include file="$(find-pkg-share rplidar_ros)/launch/rplidar_a1_launch.py">
+    <arg name="serial_port" value="/dev/rplidar" />
+    <arg name="frame_id" value="laser" />
+  </include>
 </launch>
