@@ -1,0 +1,5 @@
+all:
+  hosts:
+    genbu:
+      ansible_host: <raspberry-pi-ip>
+      ansible_user: robot
