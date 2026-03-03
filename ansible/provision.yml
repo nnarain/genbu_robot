@@ -69,14 +69,5 @@
 
     # --- Genbu Robot Debian package ---
 
-    - name: Download latest genbu-robot Debian package
-      ansible.builtin.get_url:
-        url: >-
-          https://github.com/nnarain/genbu_robot/releases/download/debian-latest/genbu-robot-latest_{{ deb_arch.stdout }}.deb
-        dest: /tmp/genbu-robot.deb
-        mode: "0644"
-
     - name: Install genbu-robot Debian package
-      ansible.builtin.apt:
-        deb: /tmp/genbu-robot.deb
-        state: present
+      ansible.builtin.import_tasks: tasks/install_genbu_robot.yml

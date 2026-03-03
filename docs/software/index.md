@@ -39,6 +39,16 @@ The playbook will:
 - Install Docker Engine
 - Download and install the latest `genbu-robot` Debian package from GitHub releases
 
+### Updating the Debian Package
+
+To update the `genbu-robot` Debian package to the latest release without re-running the full provisioning playbook:
+
+```bash
+ansible-playbook -i ansible/inventory.yml ansible/update.yml --ask-become-pass
+```
+
+This will remove the currently installed package and install the latest version from GitHub releases.
+
 ## Local Development
 
 As this is a docker based system updates to the source primarily occurs using `docker pull`. However there is always the need for local software development. Synchronizing source code between machines can be a pain. So one solution here is to use `docker context` to build remotely on the raspberry pi while keeping the source workspace local.
