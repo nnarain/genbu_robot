@@ -4,6 +4,9 @@
     <arg name="joy_config" value="ps4" />
   </include>
 
+  <!-- Sensors -->
+  <include file="$(find-pkg-share realsense2_camera)/launch/rs_launch.py">
+  </include>
   <include file="$(find-pkg-share rplidar_ros)/launch/rplidar_a1_launch.py">
     <arg name="serial_port" value="/dev/rplidar" />
     <arg name="frame_id" value="laser" />

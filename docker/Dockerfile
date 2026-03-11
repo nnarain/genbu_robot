@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-rosdep \
     build-essential \
     nano \
+    usbutils \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone external dependencies (cached unless repos file changes)
@@ -29,6 +30,8 @@ RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init
     && apt-get update \
     && cd /ros_ws \
     && rosdep install --from-paths src --ignore-src -r -y \
+    && apt-get install -y ros-${ROS_DISTRO}-librealsense2* \
+    && apt-get install -y ros-${ROS_DISTRO}-realsense2-* \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the full source and build (this layer re-runs on source changes)
