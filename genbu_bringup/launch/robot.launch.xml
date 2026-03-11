@@ -11,4 +11,7 @@
     <arg name="serial_port" value="/dev/rplidar" />
     <arg name="frame_id" value="laser" />
   </include>
+
+  <!-- Web services -->
+  <include file="$(find-pkg-share genbu_web)/launch/web.launch.xml" />
 </launch>
