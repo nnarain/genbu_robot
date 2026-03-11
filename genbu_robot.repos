@@ -11,3 +11,7 @@ repositories:
     type: git
     url: https://github.com/nnarain/teleop_twist_joy.git
     version: ds4-config
+  Slamtec/rplidar_ros:
+    type: git
+    url: https://github.com/Slamtec/rplidar_ros.git
+    version: ros2
