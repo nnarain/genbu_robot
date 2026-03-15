@@ -3,9 +3,9 @@
 <package format="3">
   <name>genbu_description</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="nnaraindev@gmail.com">root</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Genbu robot description package</description>
+  <maintainer email="nnaraindev@gmail.com">Natesh Narain</maintainer>
+  <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
