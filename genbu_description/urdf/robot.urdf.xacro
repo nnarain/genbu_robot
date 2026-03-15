@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<robot name="genbu" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find create_description)/urdf/create_2.urdf.xacro" />
+</robot>
