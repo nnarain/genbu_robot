@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rplidar">
+  <xacro:macro name="rplidar" params="parent:=base_link xyz:='0 0 0' rpy:='0 0 0'">
+    <link name="rplidar_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://genbu_description/meshes/rplidar_a1m8.dae" scale="1 1 1"/>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="rplidar_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="rplidar_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+  </xacro:macro>
+</robot>
