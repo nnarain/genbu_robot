@@ -1,17 +1,28 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rplidar">
   <xacro:macro name="rplidar" params="parent:=base_link xyz:='0 0 0' rpy:='0 0 0'">
-    <link name="rplidar_link">
+
+    <!-- Base of the RPLIDAR (below the center of the motor) -->
+    <link name="rplidar_base_link">
       <visual>
         <geometry>
           <mesh filename="package://genbu_description/meshes/rplidar_a1m8.dae" scale="1 1 1"/>
         </geometry>
       </visual>
     </link>
-    <joint name="rplidar_joint" type="fixed">
+    <joint name="rplidar_base_joint" type="fixed">
       <parent link="${parent}"/>
-      <child link="rplidar_link"/>
+      <child link="rplidar_base_link"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+
+    <!-- Laser link (position of the laser sensor ) -->
+    <link name="rplidar_laser_link">
+    </link>
+    <joint name="rplidar_laser_joint" type="fixed">
+      <parent link="rplidar_base_link"/>
+      <child link="rplidar_laser_link"/>
+      <origin xyz="-0.0455 0 0.042" rpy="0 0 0"/>
     </joint>
   </xacro:macro>
 </robot>
