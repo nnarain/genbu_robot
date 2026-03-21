@@ -1,0 +1,9 @@
+<launch>
+  <!-- Launch robot description with simulation time enabled -->
+  <include file="$(find-pkg-share genbu_description)/launch/description.launch">
+    <arg name="use_sim_time" value="true"/>
+  </include>
+
+  <!-- TODO: Spawn robot in Gazebo -->
+  <!-- TODO: Launch simulated robot drivers -->
+</launch>

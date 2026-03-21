@@ -3,6 +3,10 @@ repositories:
     type: git
     url: https://github.com/nnarain/create_robot.git
     version: jazzy
+  nnarain/create_simulator:
+    type: git
+    url: https://github.com/nnarain/create_simulator.git
+    version: foxy
   nnarain/libcreate:
     type: git
     url: https://github.com/nnarain/libcreate.git

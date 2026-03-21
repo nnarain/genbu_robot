@@ -1,0 +1,40 @@
+# Docker Compose for the Genbu robot simulation stack.
+#
+# Services:
+#   gzserver  - Headless Gazebo simulation server (upstream osrf/gazebo image)
+#   gzweb     - Web-based Gazebo visualizer (upstream osrf/gzweb image)
+#   robot     - Simulated robot bringup (built from Dockerfile.sim)
+#
+# Usage:
+#   docker compose -f docker/compose.sim.yaml up
+
+services:
+  gzserver:
+    image: osrf/gazebo:gazebo11
+    command: ["gzserver", "--verbose"]
+    networks:
+      - sim_net
+
+  gzweb:
+    image: osrf/gzweb:gzweb1.4.1
+    networks:
+      - sim_net
+    ports:
+      - "8080:8080"
+    depends_on:
+      - gzserver
+
+  robot:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.sim
+    networks:
+      - sim_net
+    environment:
+      - ROS_DOMAIN_ID=0
+    depends_on:
+      - gzserver
+
+networks:
+  sim_net:
+    driver: bridge
