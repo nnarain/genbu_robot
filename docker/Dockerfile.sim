@@ -48,4 +48,4 @@ RUN echo "source /ros_ws/install/setup.bash" >> ~/.bashrc
 # Set working directory
 WORKDIR /ros_ws
 
-CMD ["/bin/bash", "-lc", "source /opt/ros/${ROS_DISTRO}/setup.bash && export COLCON_CURRENT_PREFIX=/ros_ws/install && source /ros_ws/install/setup.bash && ros2 launch genbu_simulator robot.launch.xml"]
+CMD ["/bin/bash", "-lc", "source /opt/ros/${ROS_DISTRO}/setup.bash && export COLCON_CURRENT_PREFIX=/ros_ws/install && source /ros_ws/install/setup.bash && ros2 launch genbu_simulator robot.launch.py"]

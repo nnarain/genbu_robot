@@ -1,7 +1,7 @@
 # Docker Compose for the Genbu robot simulation stack.
 #
 # Services:
-#   gzserver  - Headless Gazebo simulation server (upstream osrf/gazebo image)
+#   gzserver  - Headless Gazebo Harmonic server (upstream osrf/gz image)
 #   gzweb     - Web-based Gazebo visualizer (upstream osrf/gzweb image)
 #   robot     - Simulated robot bringup (built from Dockerfile.sim)
 #
@@ -10,8 +10,9 @@
 
 services:
   gzserver:
-    image: osrf/gazebo:gazebo11
-    command: ["gzserver", "--verbose"]
+    image: osrf/gz:harmonic-jammy
+    # NOTE: keep this world in sync with the 'gz_args' default in robot.launch.py
+    command: ["gz", "sim", "-s", "-r", "empty.sdf"]
     networks:
       - sim_net
 
