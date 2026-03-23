@@ -15,4 +15,8 @@
   <!-- Spawn the robot entity in Gazebo -->
   <node pkg="ros_gz_sim" exec="create" name="spawn_robot" output="screen"
     args="-topic /robot_description -name $(var robot_name) -allow_renaming true" />
+
+  <!-- Bridge laser scan from Gazebo to ROS 2 -->
+  <node pkg="ros_gz_bridge" exec="parameter_bridge" name="lidar_bridge" output="screen"
+    args="/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan" />
 </launch>
