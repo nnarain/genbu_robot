@@ -1,5 +1,5 @@
 <launch>
-  <arg name="world" default="empty.sdf" />
+  <arg name="world" default="$(find-pkg-share genbu_simulator)/worlds/obstacle_course.sdf" />
   <arg name="robot_name" default="genbu" />
 
   <!-- Launch Gazebo Sim -->
