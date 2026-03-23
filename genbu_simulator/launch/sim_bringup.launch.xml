@@ -1,0 +1,18 @@
+<launch>
+  <arg name="world" default="empty.sdf" />
+  <arg name="robot_name" default="genbu" />
+
+  <!-- Launch Gazebo Sim -->
+  <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+    <arg name="gz_args" value="-r $(var world)" />
+  </include>
+
+  <!-- Robot state publisher with sim time -->
+  <include file="$(find-pkg-share genbu_description)/launch/description.launch">
+    <arg name="use_sim_time" value="true" />
+  </include>
+
+  <!-- Spawn the robot entity in Gazebo -->
+  <node pkg="ros_gz_sim" exec="create" name="spawn_robot" output="screen"
+    args="-topic /robot_description -name $(var robot_name) -allow_renaming true" />
+</launch>
