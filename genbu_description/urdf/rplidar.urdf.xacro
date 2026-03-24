@@ -32,9 +32,9 @@
         <update_rate>5.5</update_rate>
         <always_on>true</always_on>
         <visualize>true</visualize>
-        <topic>scan</topic>
+        <topic>/scan</topic>
         <gz_frame_id>rplidar_laser_link</gz_frame_id>
-        <lidar>
+        <ray>
           <scan>
             <horizontal>
               <samples>360</samples>
@@ -42,6 +42,12 @@
               <min_angle>-3.14159265</min_angle>
               <max_angle>3.14159265</max_angle>
             </horizontal>
+            <vertical>
+              <samples>1</samples>
+              <resolution>1</resolution>
+              <min_angle>0</min_angle>
+              <max_angle>0</max_angle>
+            </vertical>
           </scan>
           <range>
             <min>0.15</min>
@@ -53,7 +59,7 @@
             <mean>0.0</mean>
             <stddev>0.01</stddev>
           </noise>
-        </lidar>
+        </ray>
       </sensor>
     </gazebo>
   </xacro:macro>
