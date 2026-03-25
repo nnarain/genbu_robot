@@ -13,3 +13,4 @@ nav:
   - Logs: logs/index.md
   - Hardware: hardware/index.md
   - Software: software/index.md
+  - Simulation: simulation/index.md
