@@ -1,5 +1,5 @@
 <launch>
-  <arg name="world" default="$(find-pkg-share genbu_simulator)/worlds/default.sdf" />
+  <arg name="world" default="default" />
   <arg name="robot_name" default="genbu" />
 
   <!-- Force Mesa software rendering for WSL / non-NVIDIA environments -->
@@ -8,7 +8,7 @@
 
   <!-- Launch Gazebo Sim -->
   <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
-    <arg name="gz_args" value="-r --headless-rendering $(var world)" />
+    <arg name="gz_args" value="-r --headless-rendering $(find-pkg-share genbu_simulator)/worlds/$(var world).sdf" />
   </include>
 
   <!-- Robot state publisher with sim time -->
