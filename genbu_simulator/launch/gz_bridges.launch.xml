@@ -3,6 +3,12 @@
   <node pkg="ros_gz_bridge" exec="parameter_bridge" name="lidar_bridge" output="screen"
       args="/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan" />
 
+  <!-- Bridge odometry: Gazebo -> ROS 2 -->
+  <node pkg="ros_gz_bridge" exec="parameter_bridge" name="odom_bridge" output="screen"
+      args="/model/genbu/odometry@nav_msgs/msg/Odometry[gz.msgs.Odometry">
+    <remap from="/model/genbu/odometry" to="/odom" />
+  </node>
+
   <!-- Bridge cmd_vel: ROS 2 -> Gazebo -->
   <node pkg="ros_gz_bridge" exec="parameter_bridge" name="cmd_vel_bridge" output="screen"
       args="/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist" />
