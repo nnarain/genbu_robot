@@ -1,0 +1,8 @@
+<launch>
+  <arg name="use_sim_time" default="true" />
+
+  <include file="$(find-pkg-share slam_toolbox)/launch/online_async_launch.py">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+    <arg name="slam_params_file" value="$(find-pkg-share genbu_navigation)/config/slam_toolbox_params.yaml" />
+  </include>
+</launch>
