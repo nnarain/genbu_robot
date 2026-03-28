@@ -10,8 +10,73 @@ permissions:
   contents: write
 
 jobs:
+  # ---------------------------------------------------------------------------
+  # Stage 1: Build ROS workspace and generate GLB mesh assets
+  # ---------------------------------------------------------------------------
+  generate-assets:
+    runs-on: ubuntu-latest
+    container:
+      image: ros:jazzy
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build tools and Python dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            python3-vcstool \
+            python3-rosdep \
+            python3-pip \
+            python3-venv \
+            build-essential \
+            rsync
+          python3 -m venv /opt/mesh-venv
+          /opt/mesh-venv/bin/pip install 'trimesh[easy]'
+
+      - name: Import external repositories
+        run: |
+          mkdir -p /ros_ws/src
+          vcs import /ros_ws/src < genbu_robot.repos
+
+      - name: Copy local packages to workspace
+        run: rsync -a --exclude='.git' --exclude='.github' . /ros_ws/src/genbu_robot/
+
+      - name: Install rosdep dependencies
+        run: |
+          if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi
+          rosdep update
+          cd /ros_ws
+          rosdep install --from-paths src --ignore-src -r -y
+
+      - name: Build workspace
+        run: |
+          cd /ros_ws
+          . /opt/ros/jazzy/setup.sh
+          colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+
+      - name: Generate GLB mesh assets
+        run: |
+          . /ros_ws/install/setup.sh
+          /opt/mesh-venv/bin/python3 /ros_ws/src/genbu_robot/genbu_description/scripts/generate_mesh_assets.py \
+            /ros_ws/src/genbu_robot/genbu_description/urdf/robot.urdf.xacro \
+            --output-dir /ros_ws/mesh_assets
+
+      - name: Upload mesh assets artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mesh-assets
+          path: /ros_ws/mesh_assets/
+          retention-days: 1
+
+  # ---------------------------------------------------------------------------
+  # Stage 2: Deploy MkDocs with prebuilt GLB assets (no ROS dependency)
+  # ---------------------------------------------------------------------------
   deploy:
     runs-on: ubuntu-latest
+    needs: generate-assets
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,6 +88,12 @@ jobs:
 
       - name: Install MkDocs
         run: pip install mkdocs
+
+      - name: Download mesh assets
+        uses: actions/download-artifact@v4
+        with:
+          name: mesh-assets
+          path: docs/hardware/assets/
 
       - name: Deploy to GitHub Pages
         run: mkdocs gh-deploy --force

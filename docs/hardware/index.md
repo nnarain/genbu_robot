@@ -2,6 +2,22 @@
 
 Hardware components and design documentation.
 
+## 3D Model
+
+The robot model below is generated automatically from the URDF source of truth.
+Use your mouse (or touch) to rotate and zoom.
+
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+<model-viewer
+  src="assets/meshes/rplidar_a1m8.glb"
+  alt="RPLidar A1M8 3D model"
+  auto-rotate
+  camera-controls
+  shadow-intensity="1"
+  style="width: 100%; height: 480px; background: #f5f5f5; border-radius: 8px;">
+</model-viewer>
+
 ## Components
 
 | Component | Description | Links |
