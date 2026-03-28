@@ -5,7 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /TF1/Frames1
-        - /LaserScan1
+        - /Map1
       Splitter Ratio: 0.5
     Tree Height: 363
   - Class: rviz_common/Views
@@ -110,6 +110,10 @@ Visualization Manager:
           Value: false
         front_wheel_link:
           Value: false
+        genbu/base_footprint:
+          Value: true
+        genbu/odom:
+          Value: true
         gyro_link:
           Value: false
         rplidar_base_link:
@@ -166,6 +170,29 @@ Visualization Manager:
         Value: /scan
       Use Fixed Frame: true
       Use rainbow: true
+      Value: true
+    - Alpha: 0.699999988079071
+      Binary representation: false
+      Binary threshold: 100
+      Class: rviz_default_plugins/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map
+      Update Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_updates
+      Use Timestamp: false
       Value: true
   Enabled: true
   Global Options:
@@ -243,5 +270,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1400
-  X: 317
-  Y: 361
+  X: 2215
+  Y: 353
