@@ -22,11 +22,15 @@ Manifest entry format::
     {
       "<source_filename>": {
         "glb": "<absolute_path_to_glb>",
+        "name": "<glb_filename>",
         "xyz": [x, y, z],
         "rpy": [roll, pitch, yaw]
       },
       ...
     }
+
+The ``name`` field contains only the GLB filename (no directory path) and is
+intended for web consumers that need to construct a URL to the asset.
 """
 
 import argparse
@@ -297,6 +301,7 @@ def main(args):
         xyz, rpy = link_poses.get(link_name, _IDENTITY_POSE)
         manifest_entries[Path(abs_path).name] = {
             "glb": rel_glb,
+            "name": f"{name}.glb",
             "xyz": [round(v, 6) for v in xyz],
             "rpy": [round(v, 6) for v in rpy],
         }

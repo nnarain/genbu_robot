@@ -42,3 +42,6 @@ __pycache__/
 
 # Generated documentation assets (derived from URDF build pipeline)
 docs/hardware/assets/
+
+# MkDocs build output
+site/

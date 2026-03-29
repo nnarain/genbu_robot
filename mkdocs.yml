@@ -17,6 +17,8 @@ extra_css:
 nav:
   - Home: index.md
   - Logs: logs/index.md
-  - Hardware: hardware/index.md
+  - Hardware:
+    - Overview: hardware/index.md
+    - Exploded View: hardware/exploded.md
   - Software: software/index.md
   - Simulation: simulation/index.md
