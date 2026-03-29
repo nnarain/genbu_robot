@@ -39,6 +39,9 @@ jobs:
           mkdir -p /ros_ws/src
           vcs import /ros_ws/src < genbu_robot.repos
 
+      - name: Copy local packages to workspace
+        run: rsync -a --exclude='.git' --exclude='.github' . /ros_ws/src/genbu_robot/
+
       - name: Install rosdep dependencies
         run: |
           if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi
