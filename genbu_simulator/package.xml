@@ -10,6 +10,9 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>genbu_description</exec_depend>
+  <exec_depend>genbu_navigation</exec_depend>
+  <exec_depend>genbu_viz</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>ros_gz_bridge</exec_depend>
   <exec_depend>ros_gz_sim</exec_depend>
 
