@@ -1,17 +1,10 @@
 <launch>
-  <!-- Bridge laser scan: Gazebo -> ROS 2 -->
-  <node pkg="ros_gz_bridge" exec="parameter_bridge" name="lidar_bridge" output="screen"
-      args="/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan" />
-
-  <!-- Bridge odometry: Gazebo -> ROS 2 -->
-  <node pkg="ros_gz_bridge" exec="parameter_bridge" name="odom_bridge" output="screen"
-      args="/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry" />
-
-  <!-- Bridge TF: Gazebo -> ROS 2 (provides odom->base_footprint) -->
-  <node pkg="ros_gz_bridge" exec="parameter_bridge" name="tf_bridge" output="screen"
-      args="/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V" />
-
-  <!-- Bridge cmd_vel: ROS 2 -> Gazebo -->
-  <node pkg="ros_gz_bridge" exec="parameter_bridge" name="cmd_vel_bridge" output="screen"
-      args="/cmd_vel@geometry_msgs/msg/Twist]gz.msgs.Twist" />
+  <!-- Single bridge node for all Gazebo <-> ROS 2 topics.
+       Using ros_gz_bridge with a YAML config so all bridges start atomically
+       with use_sim_time=true, preventing TF_OLD_DATA warnings at startup. -->
+  <node pkg="ros_gz_bridge" exec="parameter_bridge" name="gz_bridge" output="screen">
+    <param name="use_sim_time" value="true" />
+    <param name="config_file"
+        value="$(find-pkg-share genbu_simulator)/config/gz_bridges.yaml" />
+  </node>
 </launch>
