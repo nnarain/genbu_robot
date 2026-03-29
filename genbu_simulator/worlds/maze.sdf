@@ -1,0 +1,254 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="maze">
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <plugin
+      filename="gz-sim-physics-system"
+      name="gz::sim::systems::Physics">
+    </plugin>
+    <plugin
+      filename="gz-sim-user-commands-system"
+      name="gz::sim::systems::UserCommands">
+    </plugin>
+    <plugin
+      filename="gz-sim-scene-broadcaster-system"
+      name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+    <plugin
+      filename="gz-sim-contact-system"
+      name="gz::sim::systems::Contact">
+    </plugin>
+    <plugin
+      filename="gz-sim-sensors-system"
+      name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!--
+      Simple enclosed maze: 3x3 grid of 2m x 2m cells (6m x 6m inner space).
+      The robot spawns at the origin (0, 0), which is the centre of cell (col=1, row=1).
+
+      Cell centres (col, row) -> (x, y):
+        (0,0)->(-2,-2)  (1,0)->(0,-2)  (2,0)->(2,-2)
+        (0,1)->(-2, 0)  (1,1)->(0, 0)  (2,1)->(2, 0)
+        (0,2)->(-2, 2)  (1,2)->(0, 2)  (2,2)->(2, 2)
+
+      Internal wall boundaries at x=-1, x=1 and y=-1, y=1.
+
+      Passages open / closed:
+        open : (0,0)-(1,0), (0,0)-(0,1), (0,1)-(1,1), (1,1)-(2,1),
+               (0,1)-(0,2), (1,1)-(1,2), (1,2)-(2,2), (2,0)-(2,1)
+        closed: (1,0)-(2,0) [wall_inner_e_r0]
+                (1,0)-(1,1) [wall_inner_n_c1]
+                (0,2)-(1,2) [wall_inner_e_r2]
+                (2,1)-(2,2) [wall_inner_n_c2]
+
+      Dead ends: (1,0), (2,0), (0,2), (2,2)
+    -->
+
+    <!-- ===== Outer boundary walls ===== -->
+
+    <!-- South outer wall -->
+    <model name="wall_outer_south">
+      <static>true</static>
+      <pose>0 -3.1 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>6.2 0.2 0.5</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>6.2 0.2 0.5</size></box></geometry>
+          <material>
+            <ambient>0.4 0.4 0.4 1</ambient>
+            <diffuse>0.4 0.4 0.4 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- North outer wall -->
+    <model name="wall_outer_north">
+      <static>true</static>
+      <pose>0 3.1 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>6.2 0.2 0.5</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>6.2 0.2 0.5</size></box></geometry>
+          <material>
+            <ambient>0.4 0.4 0.4 1</ambient>
+            <diffuse>0.4 0.4 0.4 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- West outer wall (corners covered by north/south walls) -->
+    <model name="wall_outer_west">
+      <static>true</static>
+      <pose>-3.1 0 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.2 6.0 0.5</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.2 6.0 0.5</size></box></geometry>
+          <material>
+            <ambient>0.4 0.4 0.4 1</ambient>
+            <diffuse>0.4 0.4 0.4 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- East outer wall (corners covered by north/south walls) -->
+    <model name="wall_outer_east">
+      <static>true</static>
+      <pose>3.1 0 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.2 6.0 0.5</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.2 6.0 0.5</size></box></geometry>
+          <material>
+            <ambient>0.4 0.4 0.4 1</ambient>
+            <diffuse>0.4 0.4 0.4 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== Interior walls ===== -->
+
+    <!-- Vertical wall at x=1, spanning row 0 (y: -3 to -1).
+         Closes passage between cells (1,0) and (2,0). -->
+    <model name="wall_inner_e_r0">
+      <static>true</static>
+      <pose>1.0 -2.0 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.2 2.0 0.5</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.2 2.0 0.5</size></box></geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Horizontal wall at y=-1, spanning col 1 (x: -1 to 1).
+         Closes passage between cells (1,0) and (1,1). -->
+    <model name="wall_inner_n_c1">
+      <static>true</static>
+      <pose>0.0 -1.0 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>2.0 0.2 0.5</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>2.0 0.2 0.5</size></box></geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Vertical wall at x=-1, spanning row 2 (y: 1 to 3).
+         Closes passage between cells (0,2) and (1,2). -->
+    <model name="wall_inner_e_r2">
+      <static>true</static>
+      <pose>-1.0 2.0 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>0.2 2.0 0.5</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>0.2 2.0 0.5</size></box></geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Horizontal wall at y=1, spanning col 2 (x: 1 to 3).
+         Closes passage between cells (2,1) and (2,2). -->
+    <model name="wall_inner_n_c2">
+      <static>true</static>
+      <pose>2.0 1.0 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>2.0 0.2 0.5</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>2.0 0.2 0.5</size></box></geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.5 0.5 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
