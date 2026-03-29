@@ -53,7 +53,7 @@ jobs:
         run: |
           cd /ros_ws
           . /opt/ros/jazzy/setup.sh
-          colcon build --packages-up-to genbu_mesh_extract --cmake-args -DCMAKE_BUILD_TYPE=Release
+          colcon build --packages-up-to genbu_mesh_extract genbu_description --cmake-args -DCMAKE_BUILD_TYPE=Release
 
       - name: Generate GLB mesh assets
         run: |
