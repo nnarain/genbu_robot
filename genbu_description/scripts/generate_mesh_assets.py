@@ -32,13 +32,15 @@ Manifest entry format::
 import argparse
 import hashlib
 import json
-import math
 import os
 import subprocess
 import sys
 import urllib.parse
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+import numpy as np
+from scipy.spatial.transform import Rotation
 
 
 # ---------------------------------------------------------------------------
@@ -99,55 +101,21 @@ def _parse_floats(s: str) -> list[float]:
     return [float(v) for v in s.split()] if s.strip() else [0.0, 0.0, 0.0]
 
 
-def _rpy_to_matrix(rpy: list[float]) -> list[list[float]]:
-    """Convert RPY Euler angles (extrinsic XYZ / R = Rz·Ry·Rx) to a 3×3 rotation matrix."""
-    r, p, y = rpy
-    cr, sr = math.cos(r), math.sin(r)
-    cp, sp = math.cos(p), math.sin(p)
-    cy, sy = math.cos(y), math.sin(y)
-    return [
-        [ cy * cp,  cy * sp * sr - sy * cr,  cy * sp * cr + sy * sr],
-        [ sy * cp,  sy * sp * sr + cy * cr,  sy * sp * cr - cy * sr],
-        [-sp,        cp * sr,                  cp * cr              ],
-    ]
-
-
-def _matrix_to_rpy(m: list[list[float]]) -> list[float]:
-    """Convert a 3×3 rotation matrix to RPY Euler angles (extrinsic XYZ / R = Rz·Ry·Rx)."""
-    pitch = math.atan2(-m[2][0], math.sqrt(m[0][0] ** 2 + m[1][0] ** 2))
-    if abs(math.cos(pitch)) < 1e-10:  # gimbal lock
-        roll = 0.0
-        yaw = math.atan2(-m[1][2], m[1][1])
-    else:
-        roll = math.atan2(m[2][1], m[2][2])
-        yaw = math.atan2(m[1][0], m[0][0])
-    return [roll, pitch, yaw]
-
-
 def _compose_transforms(
     parent_xyz: list[float],
     parent_rpy: list[float],
     child_xyz: list[float],
     child_rpy: list[float],
 ) -> tuple[list[float], list[float]]:
-    """Compose two SE(3) transforms: T_parent * T_child → (xyz, rpy)."""
-    R_p = _rpy_to_matrix(parent_rpy)
-    R_c = _rpy_to_matrix(child_rpy)
+    """Compose two SE(3) transforms: T_parent * T_child → (xyz, rpy).
 
-    # Rotate child origin by parent rotation and add parent origin
-    rotated = [
-        R_p[0][0] * child_xyz[0] + R_p[0][1] * child_xyz[1] + R_p[0][2] * child_xyz[2],
-        R_p[1][0] * child_xyz[0] + R_p[1][1] * child_xyz[1] + R_p[1][2] * child_xyz[2],
-        R_p[2][0] * child_xyz[0] + R_p[2][1] * child_xyz[1] + R_p[2][2] * child_xyz[2],
-    ]
-    xyz = [parent_xyz[i] + rotated[i] for i in range(3)]
-
-    # Compose rotation matrices R = R_p * R_c
-    R = [
-        [sum(R_p[i][k] * R_c[k][j] for k in range(3)) for j in range(3)]
-        for i in range(3)
-    ]
-    rpy = _matrix_to_rpy(R)
+    Uses scipy's intrinsic 'xyz' sequence, which matches URDF's RPY convention
+    (R = Rz(yaw)·Ry(pitch)·Rx(roll)).
+    """
+    R_parent = Rotation.from_euler("xyz", parent_rpy)
+    R_child = Rotation.from_euler("xyz", child_rpy)
+    xyz = (np.array(parent_xyz) + R_parent.apply(child_xyz)).tolist()
+    rpy = (R_parent * R_child).as_euler("xyz").tolist()
     return xyz, rpy
 
 
