@@ -1,15 +1,17 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>genbu_description</name>
+  <name>genbu_mesh_extract</name>
   <version>0.0.0</version>
-  <description>Genbu robot description package</description>
+  <description>Mesh extraction utilities for the Genbu robot</description>
   <maintainer email="nnaraindev@gmail.com">Natesh Narain</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>create_description</depend>
+  <depend>assimp-utils</depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-scipy</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
