@@ -8,6 +8,12 @@ theme:
   name: readthedocs
   logo: genbu-logo.png
 
+markdown_extensions:
+  - md_in_html
+
+extra_css:
+  - assets/styles/hardware.css
+
 nav:
   - Home: index.md
   - Logs: logs/index.md

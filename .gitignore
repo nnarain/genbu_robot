@@ -39,3 +39,6 @@ __pycache__/
 /debian/*.debhelper
 /debian/genbu-robot/
 /debian/*.debhelper.log
+
+# Generated documentation assets (derived from URDF build pipeline)
+docs/hardware/assets/

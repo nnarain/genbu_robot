@@ -11,4 +11,9 @@ install(
   DESTINATION share/${PROJECT_NAME}/
 )
 
+install(
+  PROGRAMS scripts/generate_mesh_assets.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 ament_package()
