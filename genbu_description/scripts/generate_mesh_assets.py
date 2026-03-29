@@ -43,6 +43,9 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 
+_IDENTITY_POSE: tuple[list[float], list[float]] = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
+
+
 # ---------------------------------------------------------------------------
 # URDF / Xacro helpers
 # ---------------------------------------------------------------------------
@@ -117,9 +120,6 @@ def _compose_transforms(
     xyz = (np.array(parent_xyz) + R_parent.apply(child_xyz)).tolist()
     rpy = (R_parent * R_child).as_euler("xyz").tolist()
     return xyz, rpy
-
-
-_IDENTITY_POSE: tuple[list[float], list[float]] = ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0])
 
 
 def extract_link_poses(urdf_string: str) -> dict[str, tuple[list[float], list[float]]]:
