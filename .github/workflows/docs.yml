@@ -31,17 +31,13 @@ jobs:
             python3-pip \
             python3-venv \
             build-essential \
-            rsync
-          python3 -m venv /opt/mesh-venv
-          /opt/mesh-venv/bin/pip install 'trimesh[easy]'
+            rsync \
+            assimp-utils
 
       - name: Import external repositories
         run: |
           mkdir -p /ros_ws/src
           vcs import /ros_ws/src < genbu_robot.repos
-
-      - name: Copy local packages to workspace
-        run: rsync -a --exclude='.git' --exclude='.github' . /ros_ws/src/genbu_robot/
 
       - name: Install rosdep dependencies
         run: |
@@ -59,7 +55,7 @@ jobs:
       - name: Generate GLB mesh assets
         run: |
           . /ros_ws/install/setup.sh
-          /opt/mesh-venv/bin/python3 /ros_ws/src/genbu_robot/genbu_description/scripts/generate_mesh_assets.py \
+          ros2 run genbu_description generate_mesh_assets.py \
             /ros_ws/src/genbu_robot/genbu_description/urdf/robot.urdf.xacro \
             --output-dir /ros_ws/mesh_assets
 

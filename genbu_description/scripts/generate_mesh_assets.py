@@ -6,11 +6,11 @@ Usage:
     generate_mesh_assets.py <xacro_file> --output-dir <dir>
 
 The script:
-  1. Expands the Xacro file to a URDF string using the ``xacro`` tool.
-  2. Parses the URDF to collect every ``<mesh filename="..."/>`` URI.
-  3. Resolves ``package://`` and ``file://`` URIs to absolute paths.
-  4. Converts each DAE / STL mesh to GLB using *trimesh*.
-  5. Writes a ``manifest.json`` that maps logical names to output paths.
+    1. Expands the Xacro file to a URDF string using the ``xacro`` tool.
+    2. Parses the URDF to collect every ``<mesh filename="..."/>`` URI.
+    3. Resolves ``package://`` and ``file://`` URIs to absolute paths.
+    4. Converts each DAE / STL mesh to GLB.
+    5. Writes a minimal ``manifest.json`` mapping source file paths to GLB paths.
 
 All outputs are placed under *output_dir*:
   <output_dir>/meshes/<name>.glb
@@ -26,16 +26,6 @@ import sys
 import urllib.parse
 import xml.etree.ElementTree as ET
 from pathlib import Path
-
-try:
-    import trimesh  # type: ignore[import]
-except ImportError as _trimesh_err:
-    print(
-        "ERROR: 'trimesh' is required but not installed. "
-        "Install it with: pip install 'trimesh[easy]'",
-        file=sys.stderr,
-    )
-    sys.exit(1)
 
 
 # ---------------------------------------------------------------------------
@@ -64,6 +54,27 @@ def extract_mesh_uris(urdf_string: str) -> list[str]:
             seen.add(filename)
             uris.append(filename)
     return uris
+
+
+def build_logical_name_map(mesh_uris: list[str]) -> dict[str, str]:
+    """Build stable logical names for each URI, handling stem collisions deterministically."""
+    by_stem: dict[str, list[str]] = {}
+    for uri in mesh_uris:
+        stem = Path(uri.split("/")[-1]).stem
+        by_stem.setdefault(stem, []).append(uri)
+
+    name_map: dict[str, str] = {}
+    for stem, uris in by_stem.items():
+        uris.sort()
+        if len(uris) == 1:
+            name_map[uris[0]] = stem
+            continue
+
+        for uri in uris:
+            suffix = hashlib.sha256(uri.encode("utf-8")).hexdigest()[:8]
+            name_map[uri] = f"{stem}_{suffix}"
+
+    return name_map
 
 
 # ---------------------------------------------------------------------------
@@ -109,76 +120,52 @@ def resolve_uri(uri: str) -> str | None:
 # ---------------------------------------------------------------------------
 
 def convert_to_glb(src: str, dst: str) -> bool:
-    """Convert a DAE or STL file at *src* to GLB and write to *dst*.
-
-    Returns ``True`` on success, ``False`` on failure.
     """
-    try:
-        scene = trimesh.load(src, force="scene")
-        scene.export(dst, file_type="glb")
-        return True
-    except (OSError, ValueError, Exception) as exc:  # noqa: BLE001
-        print(f"  ERROR converting {src}: {exc}", file=sys.stderr)
+    Convert input mesh to GLB format.
+    """
+    cmd = f'assimp export "{src}" "{dst}" --format glb --embed'
+    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"  ERROR converting {src} to {dst}:\n{result.stderr}", file=sys.stderr)
         return False
-
-
-# ---------------------------------------------------------------------------
-# Logical naming
-# ---------------------------------------------------------------------------
-
-def logical_name(uri: str) -> str:
-    """Derive a stable logical name from a mesh URI (stem of the filename)."""
-    path = uri.split("/")[-1]
-    return Path(path).stem
-
-
-# ---------------------------------------------------------------------------
-# Content hashing (for cache busting)
-# ---------------------------------------------------------------------------
-
-def file_sha256(path: str) -> str:
-    h = hashlib.sha256()
-    with open(path, "rb") as fh:
-        for chunk in iter(lambda: fh.read(65536), b""):
-            h.update(chunk)
-    return h.hexdigest()
+    return True
 
 
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
-def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Generate GLB mesh assets from a URDF/Xacro robot description."
-    )
-    parser.add_argument("xacro_file", help="Path to the main .urdf.xacro file")
-    parser.add_argument(
-        "--output-dir", "-o", required=True, help="Destination directory for generated assets"
-    )
-    args = parser.parse_args()
+def main(args):
+
+    urdf_path = Path(args.urdf)
+    if not urdf_path.exists():
+        raise FileNotFoundError(f"URDF file not found: {urdf_path}")
 
     output_dir = Path(args.output_dir)
     meshes_dir = output_dir / "meshes"
     meshes_dir.mkdir(parents=True, exist_ok=True)
+    manifest_path = output_dir / "manifest.json"
 
     # 1. Expand Xacro → URDF
-    print(f"Expanding xacro: {args.xacro_file}")
+    print(f"Expanding xacro: {args.urdf}")
     try:
-        urdf_string = expand_xacro(args.xacro_file)
+        urdf_string = expand_xacro(args.urdf)
     except subprocess.CalledProcessError as exc:
-        print(f"ERROR: xacro expansion failed:\n{exc.stderr}", file=sys.stderr)
-        return 1
+        raise RuntimeError(f"Failed to expand xacro: {exc.stderr}") from exc
 
     # 2. Extract mesh URIs
     mesh_uris = extract_mesh_uris(urdf_string)
+    mesh_uris = sorted(mesh_uris)
+    uri_name_map = build_logical_name_map(mesh_uris)
+
     print(f"Found {len(mesh_uris)} unique mesh reference(s)")
 
-    manifest: dict[str, dict] = {}
+    manifest_entries: dict[str, str] = {}
     failures = 0
+    converted = 0
 
     for uri in mesh_uris:
-        name = logical_name(uri)
+        name = uri_name_map[uri]
         print(f"\nProcessing: {uri}")
 
         # 3. Resolve URI → absolute path
@@ -194,28 +181,39 @@ def main() -> int:
 
         # 4. Convert to GLB
         glb_path = meshes_dir / f"{name}.glb"
+        rel_glb = str(glb_path.resolve())
         print(f"  {abs_path} → {glb_path}")
         if not convert_to_glb(abs_path, str(glb_path)):
             failures += 1
             continue
+        converted += 1
 
         # 5. Record in manifest
-        manifest[name] = {
-            "source": uri,
-            "glb": str(glb_path.relative_to(output_dir)),
-            "sha256": file_sha256(str(glb_path)),
-        }
+        manifest_entries[Path(abs_path).name] = rel_glb
         print(f"  OK")
 
     # 6. Write manifest.json
-    manifest_path = output_dir / "manifest.json"
-    with open(manifest_path, "w") as fh:
-        json.dump(manifest, fh, indent=2)
-    print(f"\nManifest written to {manifest_path}")
-    print(f"Converted {len(manifest)}/{len(mesh_uris)} mesh(es); {failures} failure(s)")
+    manifest = dict(sorted(manifest_entries.items()))
+    with open(manifest_path, "w", encoding="utf-8") as fh:
+        json.dump(manifest, fh, indent=2, sort_keys=True)
 
-    return 0 if failures == 0 else 1
+    print(f"\nManifest written to {manifest_path}")
+    print(
+        "Converted "
+        f"{len(manifest_entries)}/{len(mesh_uris)} mesh(es); "
+        f"{converted} converted, {failures} failure(s)"
+    )
+
+    if failures > 0:
+        raise RuntimeError(f"{failures} mesh conversion(s) failed; see warnings above")
+        
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    parser = argparse.ArgumentParser(description="Generate GLB mesh assets from a URDF/Xacro robot description.")
+    parser.add_argument("urdf", help="Path to the main .urdf file")
+    parser.add_argument("--output-dir", "-o", required=True, help="Destination directory for generated assets")
+
+    args = parser.parse_args()
+
+    sys.exit(main(args))
