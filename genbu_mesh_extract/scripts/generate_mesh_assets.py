@@ -22,11 +22,15 @@ Manifest entry format::
     {
       "<source_filename>": {
         "glb": "<absolute_path_to_glb>",
+        "name": "<glb_filename>",
         "xyz": [x, y, z],
         "rpy": [roll, pitch, yaw]
       },
       ...
     }
+
+The ``name`` field contains only the GLB filename (no directory path) and is
+intended for web consumers that need to construct a URL to the asset.
 """
 
 import argparse
@@ -178,6 +182,27 @@ def extract_mesh_uri_to_link(urdf_string: str) -> dict[str, str]:
     return uri_to_link
 
 
+def extract_visual_origins(urdf_string: str) -> dict[str, tuple[list[float], list[float]]]:
+    """Return a mapping from mesh URI to the visual <origin> (xyz, rpy) within its link.
+
+    URDF allows each ``<visual>`` element to have its own ``<origin>`` that is
+    applied *in addition* to the link's global pose.  This function captures
+    that extra transform so callers can compose it with the link pose.
+    """
+    root_xml = ET.fromstring(urdf_string)
+    uri_to_visual_origin: dict[str, tuple[list[float], list[float]]] = {}
+    for link in root_xml.iter("link"):
+        for visual in link.iter("visual"):
+            origin_el = visual.find("origin")
+            xyz = _parse_floats(origin_el.get("xyz", "") if origin_el is not None else "")
+            rpy = _parse_floats(origin_el.get("rpy", "") if origin_el is not None else "")
+            for mesh in visual.iter("mesh"):
+                filename = mesh.get("filename", "")
+                if filename and filename not in uri_to_visual_origin:
+                    uri_to_visual_origin[filename] = (xyz, rpy)
+    return uri_to_visual_origin
+
+
 # ---------------------------------------------------------------------------
 # URI resolution
 # ---------------------------------------------------------------------------
@@ -261,6 +286,7 @@ def main(args):
 
     link_poses = extract_link_poses(urdf_string)
     uri_to_link = extract_mesh_uri_to_link(urdf_string)
+    visual_origins = extract_visual_origins(urdf_string)
 
     print(f"Found {len(mesh_uris)} unique mesh reference(s)")
 
@@ -294,9 +320,12 @@ def main(args):
 
         # 5. Record in manifest with position data
         link_name = uri_to_link.get(uri, "")
-        xyz, rpy = link_poses.get(link_name, _IDENTITY_POSE)
+        link_xyz, link_rpy = link_poses.get(link_name, _IDENTITY_POSE)
+        vis_xyz, vis_rpy = visual_origins.get(uri, _IDENTITY_POSE)
+        xyz, rpy = _compose_transforms(link_xyz, link_rpy, vis_xyz, vis_rpy)
         manifest_entries[Path(abs_path).name] = {
             "glb": rel_glb,
+            "name": f"{name}.glb",
             "xyz": [round(v, 6) for v in xyz],
             "rpy": [round(v, 6) for v in rpy],
         }
