@@ -128,11 +128,13 @@ import { OrbitControls } from 'https://esm.sh/three@0.160.0/examples/jsm/control
       group.add(mesh);
     }
 
-    const isRoot = assembledPos.lengthSq() < 1e-6;
+    const explodeDir = assembledPos.lengthSq() < 1e-6
+      ? new THREE.Vector3(0, 0, 0)
+      : assembledPos.clone().normalize();
     parts.push({
       group,
       assembledPos: assembledPos.clone(),
-      explodeDir: isRoot ? new THREE.Vector3(0, 0, 0) : new THREE.Vector3(0, 1, 0),
+      explodeDir,
     });
   }
 
