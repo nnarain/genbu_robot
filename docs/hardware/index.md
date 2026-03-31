@@ -14,8 +14,6 @@ Hardware components and design documentation.
 
 ## Interactive model
 
-No the explode doesn't work yet D:
-
 <div id="ev-root" style="border:1px solid #374151;border-radius:8px;overflow:hidden;margin:1rem 0;">
 	<canvas id="ev-canvas" style="width:100%;height:500px;display:block;background:#0d1117;"></canvas>
 	<div style="padding:10px 16px;background:#111827;border-top:1px solid #374151;">
