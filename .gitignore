@@ -3,6 +3,8 @@ build/
 install/
 log/
 
+site/
+
 # CMake / Make
 CMakeFiles/
 CMakeCache.txt
