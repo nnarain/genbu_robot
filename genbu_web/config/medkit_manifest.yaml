@@ -16,10 +16,22 @@ components:
     type: "controller"
     area: robot
 
+  - id: rplidar
+    name: "RPLidar A1"
+    type: "sensor"
+    area: robot
+
 apps:
   - id: genbu-bringup
     name: "Genbu Bringup"
     is_located_on: genbu-controller
     ros_binding:
       node_name: create_driver
+      namespace: /
+
+  - id: rplidar-scan
+    name: "RPLidar"
+    is_located_on: genbu-controller
+    ros_binding:
+      node_name: rplidar_composition
       namespace: /
