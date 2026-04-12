@@ -1,8 +1,5 @@
 # Genbu robot container configuration
 GENBU_IMAGE=ghcr.io/nnarain/genbu_robot:latest
-GENBU_CONTAINER_NAME=genbu-robot
 GENBU_DOCKER_PULL=always
-GENBU_DOCKER_NETWORK=host
-GENBU_DOCKER_PRIVILEGED=true
-# Optional extra argument
-GENBU_DOCKER_EXTRA_ARG=
+# Path to the docker compose file
+GENBU_COMPOSE_FILE=/etc/genbu-robot/docker-compose.yml

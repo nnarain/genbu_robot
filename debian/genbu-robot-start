@@ -1,35 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GENBU_IMAGE="${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}"
-GENBU_CONTAINER_NAME="${GENBU_CONTAINER_NAME:-genbu-robot}"
+GENBU_COMPOSE_FILE="${GENBU_COMPOSE_FILE:-/etc/genbu-robot/docker-compose.yml}"
 GENBU_DOCKER_PULL="${GENBU_DOCKER_PULL:-always}"
-GENBU_DOCKER_NETWORK="${GENBU_DOCKER_NETWORK:-host}"
-GENBU_DOCKER_PRIVILEGED="${GENBU_DOCKER_PRIVILEGED:-true}"
-GENBU_DOCKER_EXTRA_ARG="${GENBU_DOCKER_EXTRA_ARG:-}"
 
 if [[ "${GENBU_DOCKER_PULL}" == "always" ]]; then
-  docker pull "${GENBU_IMAGE}"
+  docker compose -f "${GENBU_COMPOSE_FILE}" pull
 fi
 
-if docker ps -a --format '{{.Names}}' | grep -Fxq "${GENBU_CONTAINER_NAME}"; then
-  docker rm -f "${GENBU_CONTAINER_NAME}"
-fi
-
-docker_args=(
-  --rm
-  --name "${GENBU_CONTAINER_NAME}"
-  --network "${GENBU_DOCKER_NETWORK}"
-)
-
-if [[ "${GENBU_DOCKER_PRIVILEGED}" == "true" ]]; then
-  docker_args+=(--privileged)
-fi
-
-docker_args+=(--volume /dev:/dev)
-
-if [[ -n "${GENBU_DOCKER_EXTRA_ARG}" ]]; then
-  docker_args+=("${GENBU_DOCKER_EXTRA_ARG}")
-fi
-
-exec docker run "${docker_args[@]}" "${GENBU_IMAGE}"
+exec docker compose -f "${GENBU_COMPOSE_FILE}" up --remove-orphans
