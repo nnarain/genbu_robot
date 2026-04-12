@@ -5,7 +5,7 @@ genbu-robot (0.3.0-1) unstable; urgency=medium
   * Update genbu-robot-start to use docker compose up/pull.
   * Update systemd ExecStop to use docker compose down.
 
- -- Genbu Robot Maintainers <maintainers@example.com>  Sun, 12 Apr 2026 22:55:00 +0000
+ -- Natesh Narain <nnaraindev@gmail.com>  Sun, 12 Apr 2026 22:55:00 +0000
 
 genbu-robot (0.2.0-1) unstable; urgency=medium
 
@@ -15,10 +15,10 @@ genbu-robot (0.2.0-1) unstable; urgency=medium
   * Enable and start bluetooth service on package installation.
   * Pass joystick device through to the Docker container.
 
- -- Genbu Robot Maintainers <maintainers@example.com>  Sat, 21 Feb 2026 00:00:00 +0000
+ -- Natesh Narain <nnaraindev@gmail.com>  Sat, 21 Feb 2026 00:00:00 +0000
 
 genbu-robot-service (0.1.0-1) unstable; urgency=medium
 
   * Initial package: install systemd service to launch Genbu robot container.
 
- -- Genbu Robot Maintainers <maintainers@example.com>  Thu, 19 Feb 2026 00:00:00 +0000
+ -- Natesh Narain <nnaraindev@gmail.com>  Thu, 19 Feb 2026 00:00:00 +0000
