@@ -10,18 +10,19 @@ The `genbu_simulator` package provides a [Gazebo](https://gazebosim.org/) simula
 
 ## Launching the Simulation
 
-Use `sim_bringup.launch.xml` to start the full simulation stack:
+Use `sim_bringup.launch.py` to start the full simulation stack:
 
 ```bash
-ros2 launch genbu_simulator sim_bringup.launch.xml
+ros2 launch genbu_simulator sim_bringup.launch.py
 ```
 
 This launch file:
 
-1. Starts the Gazebo simulator with the selected world.
-2. Launches the robot state publisher (with `use_sim_time:=true`).
-3. Spawns the Genbu robot into the simulation.
-4. Bridges the lidar sensor data from Gazebo to the ROS 2 `/scan` topic.
+1. Terminates any stale Gazebo processes left over from a previous launch.
+2. Starts the Gazebo simulator with the selected world.
+3. Launches the robot state publisher (with `use_sim_time:=true`).
+4. Spawns the Genbu robot into the simulation.
+5. Bridges the lidar sensor data from Gazebo to the ROS 2 `/scan` topic.
 
 ## Launch Arguments
 
@@ -35,7 +36,7 @@ This launch file:
 Pass the `world` argument to choose a different simulation environment:
 
 ```bash
-ros2 launch genbu_simulator sim_bringup.launch.xml world:=obstacle_course
+ros2 launch genbu_simulator sim_bringup.launch.py world:=obstacle_course
 ```
 
 ## Available Worlds
@@ -59,7 +60,7 @@ Once the simulation is running, the following topics are available:
 
 ### WSL / Non-NVIDIA Environments
 
-The `sim_bringup.launch.xml` file automatically sets the following environment variables to enable Mesa software rendering when a hardware GPU is not available (e.g. WSL or CI environments):
+The `sim_bringup.launch.py` file automatically sets the following environment variables to enable Mesa software rendering when a hardware GPU is not available (e.g. WSL or CI environments):
 
 | Variable | Value |
 |----------|-------|
