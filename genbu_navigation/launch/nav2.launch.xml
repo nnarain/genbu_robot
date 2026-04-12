@@ -1,7 +1,7 @@
 <launch>
   <arg name="use_sim_time" default="true" />
 
-  <include file="$(find-pkg-share nav2_bringup)/launch/navigation_launch.py">
+  <include file="$(find-pkg-share genbu_navigation)/launch/nav2_minimal.launch.py">
     <arg name="use_sim_time" value="$(var use_sim_time)" />
     <arg name="params_file" value="$(find-pkg-share genbu_navigation)/config/nav2_params.yaml" />
   </include>
