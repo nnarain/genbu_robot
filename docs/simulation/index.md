@@ -41,7 +41,7 @@ This launch file:
 3. Spawns the Genbu robot into the simulation.
 4. Bridges sensor and control topics between Gazebo and ROS 2.
 5. Starts [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox) in online async mode for simultaneous localization and mapping.
-6. Starts the [Nav2](https://nav2.org/) navigation stack (planner, controller, behaviour trees, and lifecycle manager).
+6. Starts the [Nav2](https://nav2.org/) navigation stack (planner, controller, behavior trees, and lifecycle manager).
 7. Opens RViz with the navigation configuration.
 
 ## Launch Arguments
@@ -112,7 +112,7 @@ map            ← published by SLAM Toolbox
 ```
 /goal_pose  (RViz Nav2 Goal tool)
     → bt_navigator → /plan → controller_server
-                           → /cmd_vel_nav → smoother_server
+                           → /cmd_vel_nav → velocity_smoother
                                           → /cmd_vel → Gazebo DiffDrive
 ```
 
