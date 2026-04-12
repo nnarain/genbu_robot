@@ -1,6 +1,4 @@
 <launch>
-  <include file="$(find-pkg-share foxglove_bridge)/launch/foxglove_bridge_launch.xml">
-    <arg name="port" value="8765" />
-  </include>
-  <include file="$(find-pkg-share ros2_medkit_gateway)/launch/gateway.launch.py" />
+  <include file="$(find-pkg-share genbu_web)/launch/foxglove.launch.xml" />
+  <include file="$(find-pkg-share genbu_web)/launch/medkit.launch.xml" />
 </launch>
