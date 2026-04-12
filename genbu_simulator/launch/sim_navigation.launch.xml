@@ -1,10 +1,12 @@
 <launch>
   <arg name="world" default="maze" />
   <arg name="use_sim_time" default="true" />
+  <arg name="use_lidar" default="true" />
 
   <!-- Launch simulator with maze world -->
   <include file="$(find-pkg-share genbu_simulator)/launch/sim_bringup.launch.xml">
     <arg name="world" value="$(var world)" />
+    <arg name="use_lidar" value="$(var use_lidar)" />
   </include>
 
   <!-- Launch SLAM Toolbox for localization -->
@@ -21,7 +23,7 @@
   <node pkg="joint_state_publisher" exec="joint_state_publisher" name="joint_state_publisher" output="screen">
     <param name="use_sim_time" value="$(var use_sim_time)" />
     <param name="use_robot_description_topic" value="false" />
-    <param name="robot_description" value="$(command 'xacro $(find-pkg-share genbu_description)/urdf/robot.urdf.xacro')" />
+    <param name="robot_description" value="$(command 'xacro $(find-pkg-share genbu_description)/urdf/robot.urdf.xacro use_lidar:=$(var use_lidar)')" />
   </node>
 
   <!-- Launch RViz with navigation config -->
