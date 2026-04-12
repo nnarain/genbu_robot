@@ -9,7 +9,7 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>assimp-utils</depend>
+  <!-- <depend>assimp-utils</depend> -->
   <exec_depend>xacro</exec_depend>
   <exec_depend>genbu_description</exec_depend>
   <exec_depend>python3-numpy</exec_depend>
