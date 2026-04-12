@@ -1,7 +1,6 @@
 <launch>
   <arg name="world" default="default" />
   <arg name="robot_name" default="genbu" />
-  <arg name="use_lidar" default="true" />
 
   <!-- Force Mesa software rendering for WSL / non-NVIDIA environments -->
   <set_env name="LIBGL_ALWAYS_SOFTWARE" value="1" />
@@ -15,7 +14,6 @@
   <!-- Robot state publisher with sim time -->
   <include file="$(find-pkg-share genbu_description)/launch/description.launch">
     <arg name="use_sim_time" value="true" />
-    <arg name="use_lidar" value="$(var use_lidar)" />
   </include>
 
   <!-- Spawn the robot entity in Gazebo -->

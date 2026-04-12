@@ -1,5 +1,4 @@
 <launch>
-  <arg name="use_lidar" default="true"/>
   <arg name="use_realsense" default="false"/>
 
   <include file="$(find-pkg-share create_bringup)/launch/create_2.launch" />
@@ -10,7 +9,7 @@
   <!-- Sensors -->
   <include if="$(var use_realsense)" file="$(find-pkg-share realsense2_camera)/launch/rs_launch.py">
   </include>
-  <include if="$(var use_lidar)" file="$(find-pkg-share rplidar_ros)/launch/rplidar_a1_launch.py">
+  <include file="$(find-pkg-share rplidar_ros)/launch/rplidar_a1_launch.py">
     <arg name="serial_port" value="/dev/rplidar" />
     <arg name="frame_id" value="laser" />
   </include>

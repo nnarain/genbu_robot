@@ -1,11 +1,7 @@
 <?xml version="1.0" ?>
 <robot name="genbu" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:arg name="use_lidar" default="true"/>
-
   <xacro:include filename="$(find create_description)/urdf/create_2.urdf.xacro" />
 
-  <xacro:if value="$(arg use_lidar)">
-    <xacro:include filename="$(find genbu_description)/urdf/rplidar.urdf.xacro" />
-    <xacro:rplidar parent="base_link" xyz="0.042 -0.042 0.0720" rpy="0 0 -1.571" />
-  </xacro:if>
+  <xacro:include filename="$(find genbu_description)/urdf/rplidar.urdf.xacro" />
+  <xacro:rplidar parent="base_link" xyz="0.042 -0.042 0.0720" rpy="0 0 -1.571" />
 </robot>

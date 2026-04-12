@@ -52,7 +52,6 @@ This launch file:
 |----------|---------|-------------|
 | `world` | `default` | Name of the world file to load (see [Available Worlds](#available-worlds)). |
 | `robot_name` | `genbu` | Name assigned to the spawned robot entity in Gazebo. |
-| `use_lidar` | `true` | Include the RPLidar sensor in the robot description and enable simulation. |
 
 ### `sim_navigation.launch.xml`
 
@@ -60,7 +59,6 @@ This launch file:
 |----------|---------|-------------|
 | `world` | `maze` | Name of the world file to load. Defaults to the maze world for navigation testing. |
 | `use_sim_time` | `true` | Use simulation clock for all nodes. |
-| `use_lidar` | `true` | Include the RPLidar sensor in the robot description and enable simulation. |
 
 ### Selecting a World
 
