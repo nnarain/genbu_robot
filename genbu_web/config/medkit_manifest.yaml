@@ -1,0 +1,25 @@
+manifest_version: "1.0"
+
+metadata:
+  name: "genbu"
+  version: "0.0.0"
+  description: "Genbu robot"
+
+areas:
+  - id: robot
+    name: "Robot"
+    description: "Main robot system"
+
+components:
+  - id: genbu-controller
+    name: "Genbu Controller"
+    type: "controller"
+    area: robot
+
+apps:
+  - id: genbu-bringup
+    name: "Genbu Bringup"
+    is_located_on: genbu-controller
+    ros_binding:
+      node_name: create_driver
+      namespace: /
