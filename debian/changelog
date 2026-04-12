@@ -1,3 +1,12 @@
+genbu-robot (0.3.0-1) unstable; urgency=medium
+
+  * Switch Docker bringup to Docker Compose.
+  * Install docker-compose.yml to /etc/genbu-robot/.
+  * Update genbu-robot-start to use docker compose up/pull.
+  * Update systemd ExecStop to use docker compose down.
+
+ -- Genbu Robot Maintainers <maintainers@example.com>  Sun, 12 Apr 2026 22:55:00 +0000
+
 genbu-robot (0.2.0-1) unstable; urgency=medium
 
   * Rename package from genbu-robot-service to genbu-robot.
