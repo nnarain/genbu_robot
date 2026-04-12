@@ -89,15 +89,22 @@ From `genbu_robot` package.
 docker build -t genbu:dev -f .\docker\Dockerfile .
 ```
 
-On the Raspberry Pi:
+On the Raspberry Pi, update `/etc/default/genbu-robot` to point to the custom image:
 
 ```bash
 nano /etc/default/genbu-robot
 ```
 
-Update the docker image.
-
 ```ini
-#GENBU_IMAGE=ghcr.io/nnarain/genbu_robot:latest
 GENBU_IMAGE=genbu:dev
+```
+
+To bring the stack up or down manually using Docker Compose:
+
+```bash
+# Bring up
+GENBU_IMAGE=genbu:dev docker compose -f /etc/genbu-robot/docker-compose.yml up
+
+# Tear down
+docker compose -f /etc/genbu-robot/docker-compose.yml down
 ```

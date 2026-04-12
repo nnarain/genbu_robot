@@ -1,0 +1,8 @@
+services:
+  genbu-robot:
+    image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
+    container_name: genbu-robot
+    network_mode: host
+    privileged: true
+    volumes:
+      - /dev:/dev

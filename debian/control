@@ -9,7 +9,8 @@ Homepage: https://github.com/nnarain/genbu_robot
 
 Package: genbu-robot
 Architecture: all
-Depends: ${misc:Depends}, systemd, docker.io | docker-ce, bluetooth, bluez, bluez-tools, joystick, avahi-daemon
+Depends: ${misc:Depends}, systemd, docker-ce | docker.io, bluetooth, bluez, bluez-tools, joystick, avahi-daemon
+Recommends: docker-compose-plugin
 Description: Systemd service to launch the Genbu robot Docker container
  Installs and manages a systemd unit that runs the Genbu robot container
  at boot. Includes dependencies for Bluetooth gamepad support.

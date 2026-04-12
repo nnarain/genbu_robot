@@ -8,6 +8,8 @@ override_dh_install:
 		debian/genbu-robot/etc/default/genbu-robot
 	install -D -m 755 debian/genbu-robot-start \
 		debian/genbu-robot/usr/bin/genbu-robot-start
+	install -D -m 644 docker/docker-compose.yml \
+		debian/genbu-robot/etc/genbu-robot/docker-compose.yml
 
 override_dh_installsystemd:
 	dh_installsystemd --name=robot
