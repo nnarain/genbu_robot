@@ -75,6 +75,33 @@ ws://<robot-ip>:8765
 
 Replace `<robot-ip>` with the IP address of your robot.
 
+## Medkit SOVD Web UI
+
+[ros2_medkit](https://github.com/selfpatch/ros2_medkit) exposes a diagnostic REST API following the SOVD (Service-Oriented Vehicle Diagnostics) standard. The **medkit web UI** is a lightweight browser-based interface for browsing the SOVD entity tree.
+
+### Starting the Web UI
+
+The web UI is started automatically as part of the Docker Compose stack:
+
+```bash
+docker compose -f /etc/genbu-robot/docker-compose.yml up
+```
+
+It runs as the `ros2_medkit_web_ui` container and is accessible on host port **3000** (mapped from container port 80).
+
+### Accessing the Web UI
+
+1. Open `http://<robot-ip>:3000` in your browser.
+2. In the connection dialog, enter the medkit gateway URL:
+
+```
+http://<robot-ip>:8080
+```
+
+3. Click **Connect** to browse the entity tree.
+
+Replace `<robot-ip>` with the IP address of your robot.
+
 ## Local Development
 
 As this is a docker based system updates to the source primarily occurs using `docker pull`. However there is always the need for local software development. Synchronizing source code between machines can be a pain. So one solution here is to use `docker context` to build remotely on the raspberry pi while keeping the source workspace local.
