@@ -1,0 +1,13 @@
+<launch>
+  <arg name="use_sim_time" default="false" />
+
+  <!-- Launch SLAM Toolbox for localization -->
+  <include file="$(find-pkg-share genbu_navigation)/launch/localization.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+  </include>
+
+  <!-- Launch Nav2 navigation -->
+  <include file="$(find-pkg-share genbu_navigation)/launch/nav2.launch.xml">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+  </include>
+</launch>
