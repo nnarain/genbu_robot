@@ -14,6 +14,8 @@
     <arg name="frame_id" value="laser" />
   </include>
 
+  <include file="$(find-pkg-share genbu_navigation)/launch/navigation.launch.xml" />
+
   <!-- Web services -->
   <include file="$(find-pkg-share genbu_web)/launch/web.launch.xml" />
 </launch>
