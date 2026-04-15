@@ -1,0 +1,50 @@
+# Git
+.git/
+.gitignore
+
+# CI / GitHub
+.github/
+
+# ROS / colcon workspace outputs
+build/
+install/
+log/
+
+# CMake artifacts
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+Makefile
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Documentation
+docs/
+site/
+mkdocs.yml
+
+# Debian packaging
+debian/
+*.deb
+*.udeb
+*.ddeb
+*.build
+*.buildinfo
+*.changes
+*.dsc
+*.tar.*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Scripts (not needed in the image)
+scripts/
+
+# Ansible
+ansible/

@@ -37,9 +37,6 @@ RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init
 # Copy the full source and build (this layer re-runs on source changes)
 COPY . /ros_ws/src/genbu_robot
 
-RUN rm -rf /ros_ws/build /ros_ws/install /ros_ws/log \
-    /ros_ws/src/genbu_robot/build /ros_ws/src/genbu_robot/install /ros_ws/src/genbu_robot/log
-
 RUN cd /ros_ws \
     && . /opt/ros/${ROS_DISTRO}/setup.sh \
     && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
