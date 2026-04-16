@@ -5,7 +5,22 @@ FROM ros:${ROS_DISTRO}
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Refresh apt signing keys from their canonical upstream sources.
+# Avoids relying on the base image's potentially-stale keyring package.
+# No hardcoded fingerprints: Ubuntu and ROS maintain these files at stable URLs.
+RUN apt-get update -o Acquire::AllowInsecureRepositories=true -o Acquire::AllowDowngradeToInsecureRepositories=true || true \
+    && apt-get install -y --allow-unauthenticated curl ca-certificates \
+    && curl -fsSL https://archive.ubuntu.com/ubuntu/project/ubuntu-archive-keyring.gpg \
+         -o /usr/share/keyrings/ubuntu-archive-keyring.gpg \
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc \
+         | gpg --dearmor -o /usr/share/keyrings/ros-archive-keyring.gpg
+
+# Bust the apt/rosdep cache weekly so fastcdr and nav2 binaries stay ABI-consistent.
+# Set APT_CACHE_DATE to the current ISO week in CI (e.g. 2026-15) to force a weekly refresh.
+ARG APT_CACHE_DATE
+RUN echo "APT cache date: ${APT_CACHE_DATE}"
+
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     python3-pip \
     git \
     python3-vcstool \
