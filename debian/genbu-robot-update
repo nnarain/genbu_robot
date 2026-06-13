@@ -20,9 +20,12 @@ DEB_URL="${GITHUB_RELEASES_URL}/${DEB_NAME}_${ARCH}.deb"
 
 echo "[genbu-robot-update] architecture: ${ARCH}"
 echo "[genbu-robot-update] downloading ${DEB_URL} ..."
-curl -fsSL --retry 3 --retry-delay 5 -o "${TMP_DEB}" "${DEB_URL}"
+if ! curl -fsSL --retry 3 --retry-delay 5 -o "${TMP_DEB}" "${DEB_URL}"; then
+    echo "[genbu-robot-update] error: failed to download package from ${DEB_URL}" >&2
+    exit 1
+fi
 
 echo "[genbu-robot-update] installing package ..."
-dpkg -i "${TMP_DEB}"
+apt-get install -y "${TMP_DEB}"
 
 echo "[genbu-robot-update] update complete."
