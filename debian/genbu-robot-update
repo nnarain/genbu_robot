@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# genbu-robot-update: download and install the latest genbu-robot Debian package
+# from GitHub releases.
+#
+# Usage: sudo genbu-robot-update
+
+GITHUB_RELEASES_URL="https://github.com/nnarain/genbu_robot/releases/download/debian-latest"
+DEB_NAME="genbu-robot-latest"
+TMP_DEB="$(mktemp --suffix=.deb)"
+
+cleanup() {
+    rm -f "${TMP_DEB}"
+}
+trap cleanup EXIT
+
+ARCH="$(dpkg --print-architecture)"
+DEB_URL="${GITHUB_RELEASES_URL}/${DEB_NAME}_${ARCH}.deb"
+
+echo "[genbu-robot-update] architecture: ${ARCH}"
+echo "[genbu-robot-update] downloading ${DEB_URL} ..."
+curl -fsSL --retry 3 --retry-delay 5 -o "${TMP_DEB}" "${DEB_URL}"
+
+echo "[genbu-robot-update] installing package ..."
+dpkg -i "${TMP_DEB}"
+
+echo "[genbu-robot-update] update complete."
