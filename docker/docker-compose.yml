@@ -6,6 +6,9 @@ services:
     privileged: true
     volumes:
       - /dev:/dev
+    environment:
+      - ENABLE_FOXGLOVE=${ENABLE_FOXGLOVE:-true}
+      - ENABLE_MEDKIT=${ENABLE_MEDKIT:-true}
 
   # TODO(nnarain): ARM64 not available yet
   # medkit-web-ui:

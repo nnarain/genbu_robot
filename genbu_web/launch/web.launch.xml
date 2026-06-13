@@ -1,4 +1,7 @@
 <launch>
-  <include file="$(find-pkg-share genbu_web)/launch/foxglove.launch.xml" />
-  <include file="$(find-pkg-share genbu_web)/launch/medkit.launch.xml" />
+  <let name="enable_foxglove" value="$(env ENABLE_FOXGLOVE true)" />
+  <let name="enable_medkit" value="$(env ENABLE_MEDKIT true)" />
+
+  <include if="$(var enable_foxglove)" file="$(find-pkg-share genbu_web)/launch/foxglove.launch.xml" />
+  <include if="$(var enable_medkit)" file="$(find-pkg-share genbu_web)/launch/medkit.launch.xml" />
 </launch>

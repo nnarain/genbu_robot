@@ -53,6 +53,14 @@ This will remove the currently installed package and install the latest version 
 
 [Foxglove](https://foxglove.dev/) provides a web-based visualization and debugging interface for ROS systems.
 
+### Enabling / Disabling
+
+Foxglove is enabled by default. To disable it, set `ENABLE_FOXGLOVE=false` in `/etc/default/genbu-robot`:
+
+```ini
+ENABLE_FOXGLOVE=false
+```
+
 ### Starting the Foxglove Bridge
 
 The `genbu_web` package contains a launch file that starts the Foxglove bridge:
@@ -78,6 +86,14 @@ Replace `<robot-ip>` with the IP address of your robot.
 ## Medkit SOVD Web UI
 
 [ros2_medkit](https://github.com/selfpatch/ros2_medkit) exposes a diagnostic REST API following the SOVD (Service-Oriented Vehicle Diagnostics) standard. The **medkit web UI** is a lightweight browser-based interface for browsing the SOVD entity tree.
+
+### Enabling / Disabling
+
+Medkit is enabled by default. To disable it, set `ENABLE_MEDKIT=false` in `/etc/default/genbu-robot`:
+
+```ini
+ENABLE_MEDKIT=false
+```
 
 ### Starting the Web UI
 
