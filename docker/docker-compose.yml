@@ -1,19 +1,36 @@
 services:
-  genbu-robot:
+  genbu-hardware:
     image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
-    container_name: genbu-robot
+    container_name: genbu-hardware
     network_mode: host
     privileged: true
     volumes:
       - /dev:/dev
+    command: >
+      /bin/bash -lc "source /opt/ros/$${ROS_DISTRO}/setup.bash &&
+      export COLCON_CURRENT_PREFIX=/ros_ws/install &&
+      source /ros_ws/install/setup.bash &&
+      ros2 launch genbu_bringup hardware.launch.xml"
+
+  genbu-navigation:
+    image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
+    container_name: genbu-navigation
+    network_mode: host
+    command: >
+      /bin/bash -lc "source /opt/ros/$${ROS_DISTRO}/setup.bash &&
+      export COLCON_CURRENT_PREFIX=/ros_ws/install &&
+      source /ros_ws/install/setup.bash &&
+      ros2 launch genbu_bringup navigation.launch.xml"
+
+  genbu-web:
+    image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
+    container_name: genbu-web
+    network_mode: host
     environment:
       - ENABLE_FOXGLOVE=${ENABLE_FOXGLOVE:-true}
       - ENABLE_MEDKIT=${ENABLE_MEDKIT:-true}
-
-  # TODO(nnarain): ARM64 not available yet
-  # medkit-web-ui:
-  #   image: ghcr.io/selfpatch/ros2_medkit_web_ui:latest
-  #   container_name: ros2_medkit_web_ui
-  #   ports:
-  #     - "3000:80"
-  #   restart: unless-stopped
+    command: >
+      /bin/bash -lc "source /opt/ros/$${ROS_DISTRO}/setup.bash &&
+      export COLCON_CURRENT_PREFIX=/ros_ws/install &&
+      source /ros_ws/install/setup.bash &&
+      ros2 launch genbu_web web.launch.xml"
