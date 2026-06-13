@@ -26,6 +26,9 @@ services:
     image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
     container_name: genbu-web
     network_mode: host
+    environment:
+      - ENABLE_FOXGLOVE=${ENABLE_FOXGLOVE:-true}
+      - ENABLE_MEDKIT=${ENABLE_MEDKIT:-true}
     command: >
       /bin/bash -lc "source /opt/ros/$${ROS_DISTRO}/setup.bash &&
       export COLCON_CURRENT_PREFIX=/ros_ws/install &&
