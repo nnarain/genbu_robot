@@ -41,6 +41,18 @@ The playbook will:
 
 ### Updating the Debian Package
 
+#### On the robot (self-update)
+
+The `genbu-robot-update` script is installed on the robot as part of the Debian package and provides a simple way to pull and install the latest release directly from GitHub:
+
+```bash
+sudo genbu-robot-update
+```
+
+This will download the latest `genbu-robot` Debian package for the current architecture from GitHub releases and install it.
+
+#### From a remote machine (Ansible)
+
 To update the `genbu-robot` Debian package to the latest release without re-running the full provisioning playbook:
 
 ```bash
