@@ -21,6 +21,8 @@ services:
       export COLCON_CURRENT_PREFIX=/ros_ws/install &&
       source /ros_ws/install/setup.bash &&
       ros2 launch genbu_bringup navigation.launch.xml"
+    depends_on:
+      - genbu-hardware
 
   genbu-web:
     image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
@@ -34,3 +36,6 @@ services:
       export COLCON_CURRENT_PREFIX=/ros_ws/install &&
       source /ros_ws/install/setup.bash &&
       ros2 launch genbu_web web.launch.xml"
+    depends_on:
+      - genbu-hardware
+      - genbu-navigation
