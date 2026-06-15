@@ -39,3 +39,6 @@ services:
     depends_on:
       - genbu-hardware
       - genbu-navigation
+    ports:
+      # Foxglove Studio
+      - "8765:8765"
