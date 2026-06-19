@@ -44,6 +44,15 @@ jobs:
           cd /ros_ws
           rosdep install --from-paths src --ignore-src -r -y
 
+      - name: Build and install YDLidar SDK
+        run: |
+          cd /ros_ws/src/YDLidar-SDK
+          mkdir -p build
+          cd build
+          cmake ..
+          make -j"$(nproc)"
+          make install
+
       - name: Build workspace
         run: |
           cd /ros_ws
