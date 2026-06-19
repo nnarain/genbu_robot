@@ -49,6 +49,13 @@ RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init
     && apt-get install -y ros-${ROS_DISTRO}-realsense2-* \
     && rm -rf /var/lib/apt/lists/*
 
+RUN cd /ros_ws/src/YDLidar-SDK \
+    && mkdir -p build \
+    && cd build \
+    && cmake .. \
+    && make -j$(nproc) \
+    && make install
+
 # Copy the full source and build (this layer re-runs on source changes)
 COPY . /ros_ws/src/genbu_robot
 

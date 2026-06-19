@@ -134,6 +134,21 @@ Replace `<robot-ip>` with the IP address of your robot.
 
 As this is a docker based system updates to the source primarily occurs using `docker pull`. However there is always the need for local software development. Synchronizing source code between machines can be a pain. So one solution here is to use `docker context` to build remotely on the raspberry pi while keeping the source workspace local.
 
+### YDLidar SDK prerequisite
+
+The ROS 2 package `ydlidar_ros2_driver` depends on the native [`YDLidar-SDK`](https://github.com/YDLIDAR/YDLidar-SDK), which must be built and installed before running `colcon build` in a fresh workspace.
+
+If your workspace was created from `genbu_robot.repos`, install it with:
+
+```bash
+cd /ros_ws/src/YDLidar-SDK
+mkdir -p build
+cd build
+cmake ..
+make -j"$(nproc)"
+sudo make install
+```
+
 ```bash
 docker context create robot --docker "host=ssh://<user>@<ip>"
 ```
