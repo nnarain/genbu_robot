@@ -25,5 +25,5 @@ repositories:
     version: master
   YDLIDAR/ydlidar_ros2_driver:
     type: git
-    url: https://github.com/YDLIDAR/ydlidar_ros2_driver.git
-    version: master
+    url: https://github.com/nnarain/ydlidar_ros2_driver
+    version: jazzy-fixes
