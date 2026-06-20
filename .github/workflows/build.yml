@@ -44,12 +44,12 @@ jobs:
           cd /ros_ws
           rosdep install --from-paths src --ignore-src -r -y
 
-      - name: Build and install YDLidar SDK
+      - name: Build and install YDLidar SDK (external build for cache isolation)
         run: |
-          cd /ros_ws/src/YDLidar-SDK
-          mkdir -p build
-          cd build
-          cmake ..
+          # Build SDK outside workspace to keep it in separate cached layer
+          mkdir -p /tmp/ydlidar-sdk-build
+          cd /tmp/ydlidar-sdk-build
+          cmake /ros_ws/src/YDLIDAR/YDLidar-SDK -DCMAKE_INSTALL_PREFIX=/usr/local
           make -j"$(nproc)"
           make install
 
@@ -57,4 +57,5 @@ jobs:
         run: |
           cd /ros_ws
           . /opt/ros/${{ matrix.ros_distro }}/setup.sh
-          colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+          # SDK discovery: CMake will find ydlidar_sdkConfig.cmake in /usr/local/lib/cmake
+          colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local

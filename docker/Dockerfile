@@ -49,19 +49,21 @@ RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init
     && apt-get install -y ros-${ROS_DISTRO}-realsense2-* \
     && rm -rf /var/lib/apt/lists/*
 
-RUN cd /ros_ws/src/YDLidar-SDK \
-    && mkdir -p build \
-    && cd build \
-    && cmake .. \
+# Build YDLidar SDK in isolated layer to prevent cache invalidation
+# when only genbu_robot sources change (fixes Docker layer efficiency)
+RUN mkdir -p /tmp/ydlidar-sdk-build \
+    && cd /tmp/ydlidar-sdk-build \
+    && cmake /ros_ws/src/YDLIDAR/YDLidar-SDK -DCMAKE_INSTALL_PREFIX=/usr/local \
     && make -j$(nproc) \
-    && make install
+    && make install \
+    && rm -rf /tmp/ydlidar-sdk-build
 
 # Copy the full source and build (this layer re-runs on source changes)
 COPY . /ros_ws/src/genbu_robot
 
 RUN cd /ros_ws \
     && . /opt/ros/${ROS_DISTRO}/setup.sh \
-    && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+    && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local
 
 
 # Set up ROS environment

@@ -138,16 +138,17 @@ As this is a docker based system updates to the source primarily occurs using `d
 
 The ROS 2 package `ydlidar_ros2_driver` depends on the native [`YDLidar-SDK`](https://github.com/YDLIDAR/YDLidar-SDK), which must be built and installed before running `colcon build` in a fresh workspace.
 
-If your workspace was created from `genbu_robot.repos`, install it with:
+If your workspace was created from `genbu_robot.repos`, the SDK is imported under `/ros_ws/src/YDLIDAR/YDLidar-SDK`. Build and install it with:
 
 ```bash
-cd /ros_ws/src/YDLidar-SDK
-mkdir -p build
-cd build
-cmake ..
+mkdir -p /tmp/ydlidar-sdk-build
+cd /tmp/ydlidar-sdk-build
+cmake /ros_ws/src/YDLIDAR/YDLidar-SDK -DCMAKE_INSTALL_PREFIX=/usr/local
 make -j"$(nproc)"
 sudo make install
 ```
+
+**Note:** The build is performed outside `/ros_ws` to isolate the SDK from source tree changes. CMake will discover the installed SDK via `ydlidar_sdkConfig.cmake` in `/usr/local/lib/cmake` during `colcon build`.
 
 ```bash
 docker context create robot --docker "host=ssh://<user>@<ip>"
