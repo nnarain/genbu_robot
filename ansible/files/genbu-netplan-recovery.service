@@ -1,0 +1,14 @@
+[Unit]
+Description=Genbu Netplan Auto-Recovery
+Documentation=https://github.com/nnarain/genbu_robot
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/genbu-netplan-recovery.sh
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=genbu-netplan-recovery
+
+[Install]
+WantedBy=multi-user.target
