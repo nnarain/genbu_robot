@@ -1,6 +1,5 @@
 # Genbu robot container configuration
 GENBU_IMAGE=ghcr.io/nnarain/genbu_robot:latest
-GENBU_DOCKER_PULL=always
 # Path to the docker compose file
 GENBU_COMPOSE_FILE=/etc/genbu-robot/docker-compose.yml
 

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# genbu-robot-docker-update: pull the latest Docker image for the Genbu robot stack.
+# Prunes unused images before pulling to maximise available disk space,
+# and prunes dangling images afterwards to reclaim space freed by the update.
+#
+# Usage: sudo genbu-robot-docker-update
+
+GENBU_COMPOSE_FILE="${GENBU_COMPOSE_FILE:-/etc/genbu-robot/docker-compose.yml}"
+
+echo "[genbu-robot-docker-update] pruning unused Docker images to free disk space..."
+docker image prune -a -f
+
+echo "[genbu-robot-docker-update] pulling latest image..."
+docker compose -f "${GENBU_COMPOSE_FILE}" pull
+
+echo "[genbu-robot-docker-update] pruning dangling images after update..."
+docker image prune -f
+
+echo "[genbu-robot-docker-update] done."
