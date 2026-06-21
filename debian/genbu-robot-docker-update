@@ -10,7 +10,7 @@ set -euo pipefail
 GENBU_COMPOSE_FILE="${GENBU_COMPOSE_FILE:-/etc/genbu-robot/docker-compose.yml}"
 
 echo "[genbu-robot-docker-update] pruning unused Docker images to free disk space..."
-docker image prune -f
+docker image prune -a -f
 
 echo "[genbu-robot-docker-update] pulling latest image..."
 docker compose -f "${GENBU_COMPOSE_FILE}" pull
