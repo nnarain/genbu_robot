@@ -27,10 +27,12 @@ is_corrupted() {
             log "Corruption detected: $f is empty"
             return 0
         fi
-    done < <(find "$NETPLAN_DIR" -maxdepth 1 -name '90-nm-*.yaml' -print0 2>/dev/null)
+    done < <(find "$NETPLAN_DIR" -maxdepth 1 -name '90-nm-*.yaml' -print0)
 
     # Check 2: no YAML file in /etc/netplan/ references wlan0
-    if ! grep -rl 'wlan0' "$NETPLAN_DIR"/*.yaml &>/dev/null 2>&1; then
+    local yaml_files
+    mapfile -t yaml_files < <(find "$NETPLAN_DIR" -maxdepth 1 -name '*.yaml')
+    if [[ ${#yaml_files[@]} -eq 0 ]] || ! grep -rl 'wlan0' "${yaml_files[@]}" &>/dev/null; then
         log "Corruption detected: no YAML file in $NETPLAN_DIR references wlan0"
         return 0
     fi
