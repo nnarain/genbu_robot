@@ -21,7 +21,9 @@ log() {
 }
 
 is_corrupted() {
-    # Check 1: any 90-nm-*.yaml file exists but is empty
+    # Check 1: any 90-nm-*.yaml file exists but is empty.
+    # If no 90-nm-*.yaml files exist at all, this check passes (absence is valid;
+    # wlan0 may be configured via a hand-crafted YAML instead).
     while IFS= read -r -d '' f; do
         if [[ ! -s "$f" ]]; then
             log "Corruption detected: $f is empty"
@@ -29,10 +31,14 @@ is_corrupted() {
         fi
     done < <(find "$NETPLAN_DIR" -maxdepth 1 -name '90-nm-*.yaml' -print0)
 
-    # Check 2: no YAML file in /etc/netplan/ references wlan0
+    # Check 2: at least one YAML file in /etc/netplan/ must reference wlan0.
     local yaml_files
     mapfile -t yaml_files < <(find "$NETPLAN_DIR" -maxdepth 1 -name '*.yaml')
-    if [[ ${#yaml_files[@]} -eq 0 ]] || ! grep -rl 'wlan0' "${yaml_files[@]}" &>/dev/null; then
+    if [[ ${#yaml_files[@]} -eq 0 ]]; then
+        log "Corruption detected: no YAML files found in $NETPLAN_DIR"
+        return 0
+    fi
+    if ! grep -rl 'wlan0' "${yaml_files[@]}" &>/dev/null; then
         log "Corruption detected: no YAML file in $NETPLAN_DIR references wlan0"
         return 0
     fi
@@ -77,7 +83,7 @@ mkdir -p "$(dirname "$LOG_FILE")"
 log "Starting Netplan health check"
 
 if [[ ! -d "$NETPLAN_DIR" ]]; then
-    log "ERROR: $NETPLAN_DIR does not exist"
+    log "WARNING: $NETPLAN_DIR does not exist — attempting restoration from backup"
     do_restore
 else
     if is_corrupted; then
