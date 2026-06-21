@@ -130,6 +130,46 @@ http://<robot-ip>:8080
 
 Replace `<robot-ip>` with the IP address of your robot.
 
+## Netplan Auto-Recovery
+
+The Genbu provisioning playbook installs a one-shot systemd service (`genbu-netplan-recovery`) that runs on every boot to guard against corrupted or empty Netplan configuration files.
+
+### What it does
+
+On each boot the service:
+
+1. Checks whether `/etc/netplan/` is healthy:
+   - If any `90-nm-*.yaml` file exists, none of them may be empty (if no such files exist at all, this check is skipped — absence is valid when `wlan0` is configured via a hand-crafted YAML).
+   - At least one YAML file references `wlan0`.
+2. **Healthy** → backs up `/etc/netplan/` to `/var/lib/genbu/netplan-config.tar.gz`.
+3. **Corrupted** → moves the broken config to `/etc/netplan.corrupted.<timestamp>`, restores from the backup, and restarts NetworkManager.
+
+All actions are logged to `/var/log/genbu-netplan-recovery.log` and the systemd journal:
+
+```bash
+journalctl -u genbu-netplan-recovery
+```
+
+### Manual Recovery
+
+If the service cannot auto-recover (e.g. no backup exists yet), connect via serial console and run:
+
+```bash
+# Inspect backup contents
+tar -tzf /var/lib/genbu/netplan-config.tar.gz
+
+# Restore manually
+sudo tar -xzf /var/lib/genbu/netplan-config.tar.gz -C /etc
+
+# Restart networking
+sudo systemctl restart NetworkManager
+
+# Verify
+nmcli device status
+```
+
+The corrupted files are preserved under `/etc/netplan.corrupted.<timestamp>` for post-mortem inspection.
+
 ## Local Development
 
 As this is a docker based system updates to the source primarily occurs using `docker pull`. However there is always the need for local software development. Synchronizing source code between machines can be a pain. So one solution here is to use `docker context` to build remotely on the raspberry pi while keeping the source workspace local.

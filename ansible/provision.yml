@@ -71,3 +71,8 @@
 
     - name: Install genbu-robot Debian package
       ansible.builtin.import_tasks: tasks/install_genbu_robot.yml
+
+    # --- Netplan auto-recovery ---
+
+    - name: Set up Netplan auto-recovery service
+      ansible.builtin.import_tasks: tasks/setup_netplan_recovery.yml
