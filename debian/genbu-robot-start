@@ -2,10 +2,5 @@
 set -euo pipefail
 
 GENBU_COMPOSE_FILE="${GENBU_COMPOSE_FILE:-/etc/genbu-robot/docker-compose.yml}"
-GENBU_DOCKER_PULL="${GENBU_DOCKER_PULL:-always}"
-
-if [[ "${GENBU_DOCKER_PULL}" == "always" ]]; then
-  docker compose -f "${GENBU_COMPOSE_FILE}" pull
-fi
 
 exec docker compose -f "${GENBU_COMPOSE_FILE}" up --remove-orphans

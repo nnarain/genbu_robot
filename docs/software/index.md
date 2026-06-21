@@ -61,6 +61,26 @@ ansible-playbook -i ansible/inventory.yml ansible/update.yml --ask-become-pass
 
 This will remove the currently installed package and install the latest version from GitHub releases.
 
+### Updating the Docker Image
+
+The Docker image is **not** pulled automatically on startup. To pull the latest image manually, use the `genbu-robot-docker-update` script:
+
+```bash
+sudo genbu-robot-docker-update
+```
+
+This script will:
+
+1. Prune unused Docker images to free disk space before pulling.
+2. Pull the latest image defined in `/etc/genbu-robot/docker-compose.yml`.
+3. Prune any dangling images left over after the pull.
+
+After updating the image, restart the service to use it:
+
+```bash
+sudo systemctl restart robot
+```
+
 ## Foxglove
 
 [Foxglove](https://foxglove.dev/) provides a web-based visualization and debugging interface for ROS systems.
