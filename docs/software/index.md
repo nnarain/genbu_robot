@@ -139,7 +139,7 @@ The Genbu provisioning playbook installs a one-shot systemd service (`genbu-netp
 On each boot the service:
 
 1. Checks whether `/etc/netplan/` is healthy:
-   - No `90-nm-*.yaml` file is empty.
+   - If any `90-nm-*.yaml` file exists, none of them may be empty (if no such files exist at all, this check is skipped — absence is valid when `wlan0` is configured via a hand-crafted YAML).
    - At least one YAML file references `wlan0`.
 2. **Healthy** → backs up `/etc/netplan/` to `/var/lib/genbu/netplan-config.tar.gz`.
 3. **Corrupted** → moves the broken config to `/etc/netplan.corrupted.<timestamp>`, restores from the backup, and restarts NetworkManager.

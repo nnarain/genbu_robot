@@ -33,12 +33,12 @@ is_corrupted() {
 
     # Check 2: at least one YAML file in /etc/netplan/ must reference wlan0.
     local yaml_files
-    mapfile -t yaml_files < <(find "$NETPLAN_DIR" -maxdepth 1 -name '*.yaml')
+    mapfile -t yaml_files < <(find "$NETPLAN_DIR" -maxdepth 1 -name '*.yaml' | sort)
     if [[ ${#yaml_files[@]} -eq 0 ]]; then
         log "Corruption detected: no YAML files found in $NETPLAN_DIR"
         return 0
     fi
-    if ! grep -rl 'wlan0' "${yaml_files[@]}" &>/dev/null; then
+    if ! grep -rl 'wlan0' "${yaml_files[@]}" 2>/dev/null | grep -q .; then
         log "Corruption detected: no YAML file in $NETPLAN_DIR references wlan0"
         return 0
     fi
@@ -48,7 +48,10 @@ is_corrupted() {
 
 do_backup() {
     mkdir -p "$BACKUP_DIR"
-    tar -czf "$BACKUP_FILE" -C /etc netplan
+    if ! tar -czf "$BACKUP_FILE" -C /etc netplan; then
+        log "ERROR: Failed to create backup at $BACKUP_FILE"
+        exit 1
+    fi
     log "Backup written to $BACKUP_FILE"
 }
 
@@ -68,11 +71,17 @@ do_restore() {
     fi
 
     # Extract backup
-    tar -xzf "$BACKUP_FILE" -C /etc
+    if ! tar -xzf "$BACKUP_FILE" -C /etc; then
+        log "ERROR: Failed to extract backup from $BACKUP_FILE — system may be in a broken state"
+        exit 1
+    fi
     log "Restored $NETPLAN_DIR from $BACKUP_FILE"
 
     # Restart NetworkManager to apply the restored configuration
-    systemctl restart NetworkManager
+    if ! systemctl restart NetworkManager; then
+        log "ERROR: Failed to restart NetworkManager — manual intervention required"
+        exit 1
+    fi
     log "NetworkManager restarted"
 }
 
