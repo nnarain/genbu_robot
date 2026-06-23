@@ -16,8 +16,8 @@ components:
     type: "controller"
     area: robot
 
-  - id: rplidar
-    name: "RPLidar A1"
+  - id: ydlidar
+    name: "YDLidar X2"
     type: "sensor"
     area: robot
 
@@ -29,9 +29,9 @@ apps:
       node_name: create_driver
       namespace: /
 
-  - id: rplidar-scan
-    name: "RPLidar"
+  - id: ydlidar-scan
+    name: "YDLidar"
     is_located_on: genbu-controller
     ros_binding:
-      node_name: rplidar_composition
+      node_name: ydlidar_ros2_driver_node
       namespace: /

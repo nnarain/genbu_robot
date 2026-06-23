@@ -2,6 +2,6 @@
 <robot name="genbu" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find create_description)/urdf/create_2.urdf.xacro" />
 
-  <xacro:include filename="$(find genbu_description)/urdf/rplidar.urdf.xacro" />
-  <xacro:rplidar parent="base_link" xyz="0.042 -0.042 0.0720" rpy="0 0 -1.571" />
+  <xacro:include filename="$(find genbu_description)/urdf/ydlidar.urdf.xacro" />
+  <xacro:ydlidar parent="base_link" xyz="0.042 -0.042 0.0720" rpy="0 0 -1.571" />
 </robot>
