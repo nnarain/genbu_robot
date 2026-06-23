@@ -31,7 +31,7 @@ all:
 3. Run the provisioning playbook from the repository root:
 
 ```bash
-ansible-playbook -i ansible/inventory.yml ansible/provision.yml --ask-become-pass
+ansible-playbook -i ansible/inventory.yml ansible/provision.yml --ask-pass
 ```
 
 The playbook will:

@@ -3,7 +3,7 @@
 - name: Download latest genbu-robot Debian package
   ansible.builtin.get_url:
     url: >-
-      https://github.com/nnarain/genbu_robot/releases/download/debian-latest/genbu-robot-latest_{{ deb_arch.stdout }}.deb
+      https://github.com/nnarain/genbu_robot/releases/download/debian-latest/genbu-robot-latest_all.deb
     dest: /tmp/genbu-robot.deb
     mode: "0644"
     # force=true ensures the latest release is always fetched, since the URL and filename never change.
