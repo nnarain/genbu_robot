@@ -9,8 +9,7 @@
   <!-- Sensors -->
   <include if="$(var use_realsense)" file="$(find-pkg-share realsense2_camera)/launch/rs_launch.py">
   </include>
-  <include file="$(find-pkg-share ydlidar_ros2_driver)/launch/ydlidar_x2_launch.py">
-    <arg name="serial_port" value="/dev/lidar" />
-    <arg name="frame_id" value="laser" />
+  <include file="$(find-pkg-share ydlidar_ros2_driver)/launch/ydlidar_launch.py">
+    <arg name="params_file" value="$(find-pkg-share genbu_bringup)/config/ydlidar.yaml" />
   </include>
 </launch>
