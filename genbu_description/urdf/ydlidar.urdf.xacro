@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ydlidar">
   <xacro:macro name="ydlidar" params="parent:=base_link xyz:='0 0 0' rpy:='0 0 0'">
 
-    <!-- Base of the YDLidar (physical mount) -->
+    <!-- Base of the YDLidar (physical mount). No mesh available for this sensor. -->
     <link name="ydlidar_base_link">
     </link>
     <joint name="ydlidar_base_joint" type="fixed">
@@ -11,7 +11,8 @@
       <origin xyz="${xyz}" rpy="${rpy}"/>
     </joint>
 
-    <!-- Laser link (position of the laser sensor, matches ydlidar_ros2_driver frame_id) -->
+    <!-- Laser link (position of the laser sensor, matches ydlidar_ros2_driver frame_id).
+         No geometry needed: this is a pure TF anchor for the scan data. -->
     <link name="laser">
     </link>
     <joint name="laser_joint" type="fixed">
