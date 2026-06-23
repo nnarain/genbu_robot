@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Open an interactive shell inside a privileged container with /dev mounted.
+# Useful for inspecting or testing hardware access (serial ports, USB devices, etc.)
+# without starting the full robot stack.
+#
+# Usage:
+#   genbu-robot-hardware-shell [IMAGE]
+#
+# IMAGE defaults to the value of $GENBU_IMAGE, falling back to the image defined
+# in the compose file at /etc/genbu-robot/docker-compose.yml.
+
+set -euo pipefail
+
+GENBU_COMPOSE_FILE="${GENBU_COMPOSE_FILE:-/etc/genbu-robot/docker-compose.yml}"
+
+# Resolve image: CLI arg > $GENBU_IMAGE env var > compose file default
+if [[ $# -ge 1 ]]; then
+  IMAGE="$1"
+elif [[ -n "${GENBU_IMAGE:-}" ]]; then
+  IMAGE="${GENBU_IMAGE}"
+else
+  if [[ ! -f "${GENBU_COMPOSE_FILE}" ]]; then
+    echo "[genbu-robot-hardware-shell] error: compose file not found: ${GENBU_COMPOSE_FILE}" >&2
+    echo "[genbu-robot-hardware-shell] set GENBU_IMAGE or pass the image name as an argument" >&2
+    exit 1
+  fi
+  IMAGE=$(docker compose -f "${GENBU_COMPOSE_FILE}" config --format json \
+    | python3 -c "
+import sys, json
+try:
+    data = json.load(sys.stdin)
+except json.JSONDecodeError as e:
+    sys.stderr.write('error: failed to parse compose config: ' + str(e) + '\n')
+    sys.exit(1)
+svc = data.get('services', {}).get('genbu-hardware', {})
+img = svc.get('image', '')
+if not img:
+    sys.stderr.write('error: could not resolve image for genbu-hardware service in compose file\n')
+    sys.exit(1)
+print(img)
+")
+  if [[ -z "${IMAGE:-}" ]]; then
+    echo "[genbu-robot-hardware-shell] error: image could not be resolved" >&2
+    exit 1
+  fi
+fi
+
+echo "[genbu-robot-hardware-shell] launching privileged shell with /dev mounted"
+echo "[genbu-robot-hardware-shell] image: ${IMAGE}"
+
+exec docker run --rm -it \
+  --privileged \
+  --network host \
+  --volume /dev:/dev \
+  "${IMAGE}" \
+  /bin/bash -l
