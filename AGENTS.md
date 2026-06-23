@@ -128,8 +128,8 @@ map  (SLAM Toolbox)
             ├── right_wheel_link  (joint_state_publisher)
             ├── front_wheel_link  (fixed joint)
             ├── gyro_link         (fixed joint)
-            └── rplidar_base_link
-                └── rplidar_laser_link
+            └── ydlidar_base_link
+                └── laser
 ```
 
 ---
@@ -177,7 +177,7 @@ ros2 node list | sort | uniq -d
   blocks lifecycle activation for the entire Nav2 stack.
 - **`cmd_vel` remapping**: Nav2 publishes to `cmd_vel_nav` → velocity_smoother →
   `cmd_vel`. The Gazebo bridge listens on `cmd_vel`. Both must exist.
-- **Frame names**: sim uses `rplidar_laser_link` (not `laser`). Nav2 params use
+- **Frame names**: sim uses `laser` (not `base_link`). Nav2 params use
   `base_footprint` (not `base_link`).
 - **Stale sim processes**: `Ctrl+C` on launch can leave `gz sim server` alive. Multiple
   servers produce mixed `/clock`, `/scan`, and `/tf` timestamps, leading to message

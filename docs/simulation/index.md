@@ -103,8 +103,8 @@ map            ← published by SLAM Toolbox
             ├── right_wheel_link
             ├── front_wheel_link
             ├── gyro_link
-            └── rplidar_base_link
-                └── rplidar_laser_link
+            └── ydlidar_base_link
+                └── laser
 ```
 
 ### Navigation Stack Architecture
