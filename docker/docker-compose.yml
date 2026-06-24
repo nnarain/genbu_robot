@@ -3,6 +3,9 @@ services:
     image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
     container_name: genbu-hardware
     network_mode: host
+    ipc: host
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
     privileged: true
     volumes:
       - /dev:/dev
@@ -16,6 +19,9 @@ services:
     image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
     container_name: genbu-navigation
     network_mode: host
+    ipc: host
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
     command: >
       /bin/bash -lc "source /opt/ros/$${ROS_DISTRO}/setup.bash &&
       export COLCON_CURRENT_PREFIX=/ros_ws/install &&
@@ -28,7 +34,9 @@ services:
     image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
     container_name: genbu-web
     network_mode: host
+    ipc: host
     environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
       - ENABLE_FOXGLOVE=${ENABLE_FOXGLOVE:-true}
       - ENABLE_MEDKIT=${ENABLE_MEDKIT:-true}
     command: >
