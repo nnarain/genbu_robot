@@ -33,7 +33,7 @@ class TfTreeDiagnostics(Node):
             self.get_parameter("stale_check_transforms").value
         )
 
-        self._tf_buffer = Buffer(node=self)
+        self._tf_buffer = Buffer(clock=self.get_clock())
         self._tf_listener = TransformListener(self._tf_buffer, self)
 
         self._updater = Updater(self)
@@ -62,20 +62,18 @@ class TfTreeDiagnostics(Node):
                 status.add(spec, "invalid specification")
                 continue
 
-            if not self._tf_buffer.can_transform(
-                parent_frame, child_frame, Time(), timeout
-            ):
-                errors.append(f"missing transform {parent_frame}->{child_frame}")
-                status.add(spec, "missing")
-                continue
-
             try:
-                transform = self._tf_buffer.lookup_transform(parent_frame, child_frame, Time())
+                transform = self._tf_buffer.lookup_transform(
+                    parent_frame,
+                    child_frame,
+                    Time(),
+                    timeout=timeout,
+                )
             except TransformException as exc:
                 errors.append(
-                    f"lookup failed for {parent_frame}->{child_frame}: {str(exc)}"
+                    f"missing transform {parent_frame}->{child_frame}: {str(exc)}"
                 )
-                status.add(spec, "lookup failed")
+                status.add(spec, "missing")
                 continue
 
             stamp = Time.from_msg(transform.header.stamp)
