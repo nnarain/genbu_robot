@@ -15,19 +15,12 @@ cleanup() {
 }
 trap cleanup EXIT
 
-ARCH="$(dpkg --print-architecture)"
-DEB_URL="${GITHUB_RELEASES_URL}/${DEB_NAME}_${ARCH}.deb"
-DEB_URL_ALL="${GITHUB_RELEASES_URL}/${DEB_NAME}_all.deb"
+DEB_URL="${GITHUB_RELEASES_URL}/${DEB_NAME}_all.deb"
 
-echo "[genbu-robot-update] architecture: ${ARCH}"
 echo "[genbu-robot-update] downloading ${DEB_URL} ..."
 if ! curl -fsSL --retry 3 --retry-delay 5 -o "${TMP_DEB}" "${DEB_URL}"; then
-    echo "[genbu-robot-update] arch-specific package not found, trying architecture-independent package ..."
-    echo "[genbu-robot-update] downloading ${DEB_URL_ALL} ..."
-    if ! curl -fsSL --retry 3 --retry-delay 5 -o "${TMP_DEB}" "${DEB_URL_ALL}"; then
-        echo "[genbu-robot-update] error: failed to download package from ${DEB_URL} or ${DEB_URL_ALL}" >&2
-        exit 1
-    fi
+    echo "[genbu-robot-update] error: failed to download package from ${DEB_URL}" >&2
+    exit 1
 fi
 
 echo "[genbu-robot-update] installing package ..."
