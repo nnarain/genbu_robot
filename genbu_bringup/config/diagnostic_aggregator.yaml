@@ -1,0 +1,9 @@
+diagnostic_aggregator:
+  ros__parameters:
+    pub_rate: 1.0
+    base_path: ""
+    analyzers:
+      others:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Other
+        contains: [""]
