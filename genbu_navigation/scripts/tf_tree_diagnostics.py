@@ -36,7 +36,10 @@ class TfTreeDiagnostics(Node):
             self.get_parameter("stale_check_transforms").value
         )
 
-        self._tf_buffer = Buffer(clock=self.get_clock())
+        self._tf_buffer = Buffer(
+            cache_time=Duration(seconds=10.0),
+            clock=self.get_clock(),
+        )
         self._tf_listener = TransformListener(self._tf_buffer, self)
 
         self._updater = Updater(self)
@@ -49,6 +52,7 @@ class TfTreeDiagnostics(Node):
 
     def _trigger_diagnostics_update(self) -> None:
         if not self._diagnostic_update_lock.acquire(blocking=False):
+            self.get_logger().debug("Skipping TF diagnostics update, previous check still running")
             return
 
         try:
