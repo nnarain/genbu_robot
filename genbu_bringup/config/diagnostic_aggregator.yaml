@@ -4,6 +4,5 @@ diagnostic_aggregator:
     base_path: ""
     analyzers:
       others:
-        type: diagnostic_aggregator/GenericAnalyzer
+        type: diagnostic_aggregator/OtherAnalyzer
         path: Other
-        contains: [""]
