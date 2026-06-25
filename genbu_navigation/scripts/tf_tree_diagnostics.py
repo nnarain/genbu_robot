@@ -2,11 +2,12 @@
 
 import rclpy
 from diagnostic_msgs.msg import DiagnosticStatus
-from diagnostic_updater import Updater
+from diagnostic_updater import DiagnosticStatusWrapper, Updater
 from rclpy.duration import Duration
 from rclpy.node import Node
 from rclpy.time import Time
 from tf2_ros import Buffer, TransformException, TransformListener
+from typing import Tuple
 
 
 class TfTreeDiagnostics(Node):
@@ -33,14 +34,14 @@ class TfTreeDiagnostics(Node):
         )
 
         self._tf_buffer = Buffer(node=self)
-        self._tf_listener = TransformListener(self._tf_buffer, self, spin_thread=True)
+        self._tf_listener = TransformListener(self._tf_buffer, self)
 
         self._updater = Updater(self)
         self._updater.setHardwareID("tf_tree")
         self._updater.add("TF Tree", self._update_diagnostics)
         self._timer = self.create_timer(self._check_period, self._updater.force_update)
 
-    def _parse_transform_spec(self, spec: str) -> tuple[str, str]:
+    def _parse_transform_spec(self, spec: str) -> Tuple[str, str]:
         parts = [part.strip() for part in spec.split("->", 1)]
         if len(parts) != 2 or not parts[0] or not parts[1]:
             raise ValueError(
@@ -48,7 +49,7 @@ class TfTreeDiagnostics(Node):
             )
         return parts[0], parts[1]
 
-    def _update_diagnostics(self, status) -> DiagnosticStatus:
+    def _update_diagnostics(self, status: DiagnosticStatusWrapper) -> DiagnosticStatus:
         errors = []
         now = self.get_clock().now()
         timeout = Duration(seconds=self._transform_timeout)
