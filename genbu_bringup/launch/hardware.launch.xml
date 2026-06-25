@@ -11,5 +11,6 @@
   </include>
   <include file="$(find-pkg-share ydlidar_ros2_driver)/launch/ydlidar_x2_launch.py">
     <arg name="serial_port" value="/dev/lidar" />
+    <arg name="frame_id" value="laser" />
   </include>
 </launch>
