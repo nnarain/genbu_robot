@@ -13,4 +13,8 @@
     <arg name="serial_port" value="/dev/lidar" />
     <arg name="frame_id" value="laser" />
   </include>
+
+  <node pkg="diagnostic_aggregator" exec="aggregator_node" name="diagnostic_aggregator" output="screen">
+    <param from="$(find-pkg-share genbu_bringup)/config/diagnostic_aggregator.yaml" />
+  </node>
 </launch>
