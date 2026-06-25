@@ -7,4 +7,9 @@ install(DIRECTORY launch config
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(PROGRAMS
+  scripts/tf_tree_diagnostics.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 ament_package()
