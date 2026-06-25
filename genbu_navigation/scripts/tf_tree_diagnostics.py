@@ -44,7 +44,7 @@ class TfTreeDiagnostics(Node):
         parts = [part.strip() for part in spec.split("->", 1)]
         if len(parts) != 2 or not parts[0] or not parts[1]:
             raise ValueError(
-                f"Invalid transform specification '{spec}', expected target->source"
+                f"Invalid transform specification '{spec}', expected parent_frame->child_frame"
             )
         return parts[0], parts[1]
 
@@ -55,28 +55,24 @@ class TfTreeDiagnostics(Node):
 
         for spec in self._required_transforms:
             try:
-                target_frame, source_frame = self._parse_transform_spec(spec)
+                parent_frame, child_frame = self._parse_transform_spec(spec)
             except ValueError as exc:
                 errors.append(str(exc))
                 status.add(spec, "invalid specification")
                 continue
 
             if not self._tf_buffer.can_transform(
-                target_frame, source_frame, Time(), timeout
+                parent_frame, child_frame, Time(), timeout
             ):
-                errors.append(
-                    f"missing transform {target_frame} <- {source_frame}"
-                )
+                errors.append(f"missing transform {parent_frame}->{child_frame}")
                 status.add(spec, "missing")
                 continue
 
             try:
-                transform = self._tf_buffer.lookup_transform(
-                    target_frame, source_frame, Time()
-                )
+                transform = self._tf_buffer.lookup_transform(parent_frame, child_frame, Time())
             except TransformException as exc:
                 errors.append(
-                    f"lookup failed for {target_frame} <- {source_frame}: {str(exc)}"
+                    f"lookup failed for {parent_frame}->{child_frame}: {str(exc)}"
                 )
                 status.add(spec, "lookup failed")
                 continue
@@ -89,7 +85,7 @@ class TfTreeDiagnostics(Node):
             age = (now - stamp).nanoseconds / 1e9
             if spec in self._stale_check_transforms and age > self._transform_max_age:
                 errors.append(
-                    f"stale transform {target_frame} <- {source_frame} ({age:.2f}s old)"
+                    f"stale transform {parent_frame}->{child_frame} ({age:.2f}s old)"
                 )
                 status.add(spec, f"stale ({age:.2f}s)")
                 continue
