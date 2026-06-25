@@ -39,7 +39,20 @@ class TfTreeDiagnostics(Node):
         self._updater = Updater(self)
         self._updater.setHardwareID("tf_tree")
         self._updater.add("TF Tree", self._update_diagnostics)
-        self._timer = self.create_timer(self._check_period, self._updater.force_update)
+        self._diagnostic_update_in_progress = False
+        self._timer = self.create_timer(
+            self._check_period, self._trigger_diagnostics_update
+        )
+
+    def _trigger_diagnostics_update(self) -> None:
+        if self._diagnostic_update_in_progress:
+            return
+
+        self._diagnostic_update_in_progress = True
+        try:
+            self._updater.force_update()
+        finally:
+            self._diagnostic_update_in_progress = False
 
     def _parse_transform_spec(self, spec: str) -> Tuple[str, str]:
         parts = [part.strip() for part in spec.split("->", 1)]
@@ -53,6 +66,7 @@ class TfTreeDiagnostics(Node):
         errors = []
         now = self.get_clock().now()
         timeout = Duration(seconds=self._transform_timeout)
+        latest_time = Time()
 
         for spec in self._required_transforms:
             try:
@@ -66,7 +80,7 @@ class TfTreeDiagnostics(Node):
                 transform = self._tf_buffer.lookup_transform(
                     parent_frame,
                     child_frame,
-                    Time(),
+                    latest_time,
                     timeout=timeout,
                 )
             except TransformException as exc:
