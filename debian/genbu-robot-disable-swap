@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# genbu-robot-disable-swap: disable swap on the Raspberry Pi.
+#
+# - Turns off all active swap immediately
+# - Comments out swap entries in /etc/fstab to survive reboots
+# - Stops and disables the dphys-swapfile service if present
+#
+# Usage: sudo genbu-robot-disable-swap
+
+echo "[genbu-robot-disable-swap] disabling swap ..."
+
+swapoff -a
+
+# Comment out any active swap entries in /etc/fstab
+sed -i -E 's|^([^#].*\sswap\s.*)$|# \1|' /etc/fstab
+
+if systemctl list-unit-files dphys-swapfile.service &>/dev/null; then
+    echo "[genbu-robot-disable-swap] stopping dphys-swapfile ..."
+    systemctl stop dphys-swapfile || true
+    systemctl disable dphys-swapfile || true
+fi
+
+echo "[genbu-robot-disable-swap] done."

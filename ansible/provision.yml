@@ -4,6 +4,11 @@
   become: true
 
   tasks:
+    # --- Genbu Robot Debian package ---
+
+    - name: Install genbu-robot Debian package
+      ansible.builtin.import_tasks: tasks/install_genbu_robot.yml
+
     # --- Swap ---
 
     - name: Disable swap
@@ -71,11 +76,6 @@
         name: "{{ ansible_user }}"
         groups: docker
         append: true
-
-    # --- Genbu Robot Debian package ---
-
-    - name: Install genbu-robot Debian package
-      ansible.builtin.import_tasks: tasks/install_genbu_robot.yml
 
     # --- Netplan auto-recovery ---
 
