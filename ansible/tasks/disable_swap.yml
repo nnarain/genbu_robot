@@ -1,0 +1,28 @@
+---
+- name: Check if swap is currently active
+  ansible.builtin.command: swapon --show
+  register: swap_status
+  changed_when: false
+
+- name: Disable swap immediately
+  ansible.builtin.command: swapoff -a
+  when: swap_status.stdout | length > 0
+  changed_when: swap_status.stdout | length > 0
+
+- name: Remove swap entries from /etc/fstab
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: '^([^#].*\sswap\s.*)$'
+    replace: '# \1'
+
+- name: Check if dphys-swapfile service exists
+  ansible.builtin.stat:
+    path: /lib/systemd/system/dphys-swapfile.service
+  register: dphys_swapfile_service
+
+- name: Disable dphys-swapfile service
+  ansible.builtin.systemd:
+    name: dphys-swapfile
+    enabled: false
+    state: stopped
+  when: dphys_swapfile_service.stat.exists

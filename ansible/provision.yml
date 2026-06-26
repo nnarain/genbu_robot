@@ -4,6 +4,11 @@
   become: true
 
   tasks:
+    # --- Swap ---
+
+    - name: Disable swap
+      ansible.builtin.import_tasks: tasks/disable_swap.yml
+
     # --- Docker ---
 
     - name: Install Docker prerequisites
