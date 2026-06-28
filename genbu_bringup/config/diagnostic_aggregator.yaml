@@ -3,6 +3,14 @@ diagnostic_aggregator:
     pub_rate: 1.0
     base_path: ""
     analyzers:
+      base:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Base
+        contains: ["Create", "Battery", "Motor", "Wheel"]
+      sensors:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Sensors
+        contains: ["ydlidar", "YDLidar", "Laser", "lidar"]
       others:
         type: diagnostic_aggregator/OtherAnalyzer
         path: Other
