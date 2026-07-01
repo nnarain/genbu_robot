@@ -1,7 +1,9 @@
 <launch>
   <arg name="use_realsense" default="false"/>
 
-  <include file="$(find-pkg-share create_bringup)/launch/create_2.launch" />
+  <include file="$(find-pkg-share create_bringup)/launch/create_2.launch">
+    <arg name="config" value="$(find-pkg-share genbu_bringup)/config/create_driver.yaml" />
+  </include>
   <include file="$(find-pkg-share teleop_twist_joy)/launch/teleop-launch.py" >
     <arg name="joy_config" value="ps4" />
   </include>
