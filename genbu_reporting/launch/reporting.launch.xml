@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="diagnostic_aggregator" exec="aggregator_node" name="diagnostic_aggregator" output="screen">
+    <param from="$(find-pkg-share genbu_reporting)/config/diagnostic_aggregator.yaml" />
+  </node>
+</launch>

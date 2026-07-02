@@ -13,5 +13,6 @@ Named after the Black Tortoise of Chinese myth, an homage to turtlebot, Genbu re
 | genbu_bringup | Launch files and configuration for bringing up the robot |
 | genbu_control | Control nodes for the robot |
 | genbu_description | URDF robot description |
+| genbu_reporting | Diagnostic reporting (diagnostic aggregator) |
 | genbu_simulator | Gazebo simulation environment |
 | genbu_web | Web applications for the robot (Foxglove bridge) |
