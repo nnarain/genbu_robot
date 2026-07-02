@@ -30,6 +30,21 @@ services:
     depends_on:
       - genbu-hardware
 
+  genbu-reporting:
+    image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
+    container_name: genbu-reporting
+    network_mode: host
+    ipc: host
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
+    command: >
+      /bin/bash -lc "source /opt/ros/$${ROS_DISTRO}/setup.bash &&
+      export COLCON_CURRENT_PREFIX=/ros_ws/install &&
+      source /ros_ws/install/setup.bash &&
+      ros2 launch genbu_reporting reporting.launch.xml"
+    depends_on:
+      - genbu-hardware
+
   genbu-web:
     image: ${GENBU_IMAGE:-ghcr.io/nnarain/genbu_robot:latest}
     container_name: genbu-web
