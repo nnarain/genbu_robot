@@ -1,0 +1,146 @@
+manifest_version: "1.0"
+
+metadata:
+  name: "genbu-robot"
+  version: "1.0.0"
+  description: "Genbu robot manifest for ROS 2 Medkit discovery"
+
+config:
+  unmanifested_nodes: warn
+  inherit_runtime_resources: true
+  allow_manifest_override: true
+
+areas:
+  - id: robot
+    name: "Robot"
+    description: "Core robot platform and low-level drivers"
+
+  - id: sensors
+    name: "Sensors"
+    description: "Physical sensor subsystem"
+
+  - id: navigation
+    name: "Navigation"
+    description: "Localization, planning, and control stack"
+
+  - id: diagnostics
+    name: "Diagnostics"
+    namespace: /diagnostics
+    description: "Health monitoring and diagnostic reporting"
+
+components:
+  - id: create-base
+    name: "Create Mobile Base"
+    type: "actuator"
+    area: robot
+
+  - id: lidar-unit
+    name: "YDLidar X2"
+    type: "sensor"
+    area: sensors
+
+  - id: nav2-stack
+    name: "Nav2 Stack"
+    type: "controller"
+    area: navigation
+
+  - id: reporting-stack
+    name: "Reporting Stack"
+    type: "controller"
+    area: diagnostics
+
+apps:
+  - id: create-driver
+    name: "Create Driver"
+    category: "driver"
+    is_located_on: create-base
+    ros_binding:
+      node_name: create_driver
+      namespace: /
+
+  - id: robot-state-publisher
+    name: "Robot State Publisher"
+    category: "state"
+    is_located_on: create-base
+    depends_on:
+      - create-driver
+    ros_binding:
+      node_name: robot_state_publisher
+      namespace: /
+
+  - id: ydlidar-driver
+    name: "YDLidar Driver"
+    category: "driver"
+    is_located_on: lidar-unit
+    ros_binding:
+      node_name: ydlidar_ros2_driver_node
+      namespace: /
+
+  - id: planner-server
+    name: "Planner Server"
+    category: "navigation"
+    is_located_on: nav2-stack
+    ros_binding:
+      node_name: planner_server
+      namespace: /
+
+  - id: controller-server
+    name: "Controller Server"
+    category: "navigation"
+    is_located_on: nav2-stack
+    depends_on:
+      - planner-server
+    ros_binding:
+      node_name: controller_server
+      namespace: /
+
+  - id: bt-navigator
+    name: "BT Navigator"
+    category: "navigation"
+    is_located_on: nav2-stack
+    depends_on:
+      - planner-server
+      - controller-server
+    ros_binding:
+      node_name: bt_navigator
+      namespace: /
+
+  - id: diagnostic-aggregator
+    name: "Diagnostic Aggregator"
+    category: "diagnostics"
+    is_located_on: reporting-stack
+    ros_binding:
+      node_name: diagnostic_aggregator
+      namespace: /
+
+functions:
+  - id: mobility
+    name: "Mobility"
+    category: "motion"
+    hosted_by:
+      - create-driver
+      - controller-server
+      - bt-navigator
+
+  - id: perception
+    name: "Perception"
+    category: "sensing"
+    hosted_by:
+      - ydlidar-driver
+
+  - id: autonomous-navigation
+    name: "Autonomous Navigation"
+    category: "navigation"
+    depends_on:
+      - mobility
+      - perception
+    hosted_by:
+      - planner-server
+      - controller-server
+      - bt-navigator
+
+  - id: health-monitoring
+    name: "Health Monitoring"
+    category: "diagnostics"
+    hosted_by:
+      - diagnostic-aggregator
