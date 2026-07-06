@@ -1,8 +1,8 @@
 <launch>
   <node pkg="ros2_medkit_gateway" exec="gateway_node" name="ros2_medkit_gateway" output="screen">
-    <param from="$(find-pkg-share genbu_reporting)/config/manifest.yaml" />
+    <param from="$(find-pkg-share ros2_medkit_gateway)/config/gateway_params.yaml" />
     <param name="cors.allowed_origins" value='["*"]' />
     <param name="discovery.mode" value="hybrid" />
-    <param name="discovery.manifest_path" value="$(find-pkg-share genbu_web)/config/medkit_manifest.yaml" />
+    <param name="discovery.manifest_path" value="$(find-pkg-share genbu_reporting)/config/manifest.yaml" />
   </node>
 </launch>
