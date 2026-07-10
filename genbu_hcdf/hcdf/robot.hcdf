@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<hcdf version="1.0" name="genbu-robot" body-frame="FLU" world-frame="ENU">
+  <description>Genbu system topology</description>
+  <author>nnarain</author>
+  <license>Apache-2.0</license>
+
+  <comp name="base" role="parent" struct-type="chassis">
+    <description>Simple base component for mounting sensors.</description>
+    <inertial>
+      <mass>5.0</mass>
+      <com>0 0 0</com>
+    </inertial>
+
+    <frame name="camera_mount" relative-to="base">
+      <pose>0.20 0.00 0.30 0 0 0</pose>
+    </frame>
+
+    <frame name="lidar_mount" relative-to="base">
+      <pose>0.00 0.00 0.25 0 0 0</pose>
+    </frame>
+  </comp>
+
+  <comp name="lidar_unit" role="sensor">
+    <description>YDLidar X2L</description>
+    <extension domain="robot_ontology" version="1.0">
+      <!-- Any well-formed XML here -->
+      <tag represents="comp-type">ydlidar:X2L</tag>
+    </extension>
+    <inertial>
+      <mass>0.20</mass>
+      <com>0 0 0</com>
+    </inertial>
+    <frame name="laser_frame" relative-to="lidar_unit">
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+    <sensor name="lidar0" update-rate="5.0">
+      <optical type="lidar">
+        <driver name="my_lidar"/>
+      </optical>
+    </sensor>
+  </comp>
+
+  <joint name="base_to_lidar" type="fixed">
+    <parent comp="base"/>
+    <child comp="lidar_unit"/>
+    <origin xyz="0.00 0.00 0.25"/>
+  </joint>
+
+  <!-- Network Topology -->
+
+  <network name="base_network">
+    <description>Serial link between the iRobot Create 2 base and the Raspberry Pi</description>
+    <link name="serial0">
+      <wired standard="uart">
+        <port>rpi/serial0</port>
+        <port>base/serial0</port>
+      </wired>
+    </link>
+  </network>
+  <network name="lidar_network">
+    <description>Serial link between the Lidar and the Raspberry Pi</description>
+    <link name="lidar">
+      <wired standard="uart">
+        <port>rpi:///dev/serial0</port>
+        <port>lidar/serial0</port>
+      </wired>
+    </link>
+  </network>
+
+</hcdf>

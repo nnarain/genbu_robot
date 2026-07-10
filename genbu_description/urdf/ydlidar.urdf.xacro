@@ -12,7 +12,7 @@
     </joint>
 
     <!-- Laser link (position of the laser sensor, matches ydlidar_ros2_driver frame_id).
-         No geometry needed: this is a pure TF anchor for the scan data. -->
+         No geometry needed this is a pure TF anchor for the scan data. -->
     <link name="laser">
     </link>
     <joint name="laser_joint" type="fixed">
