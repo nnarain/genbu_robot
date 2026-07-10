@@ -11,6 +11,14 @@ repositories:
     type: git
     url: https://github.com/nnarain/teleop_twist_joy.git
     version: ds4-config
+  nnarain/robot_ontology:
+    type: git
+    url: https://github.com/nnarain/robot_ontology.git
+    version: devel
+  nnarain/hcdf_robot_generator:
+    type: git
+    url: https://github.com/nnarain/hcdf_robot_generator.git
+    version: devel
   YDLIDAR/YDLidar-SDK:
     type: git
     url: https://github.com/YDLIDAR/YDLidar-SDK.git
