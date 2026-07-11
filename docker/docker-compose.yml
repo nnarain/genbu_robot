@@ -65,3 +65,16 @@ services:
     ports:
       # Foxglove Studio
       - "8765:8765"
+      # Medkit Gateway
+      - "8080:8080"
+
+  # Medkit WebUI
+  medkit-ui:
+    image: ${MEDKIT_UI_IMAGE:-ghcr.io/selfpatch/ros2_medkit_web_ui:latest}
+    container_name: medkit-ui
+    network_mode: host
+    depends_on:
+      - genbu-web
+    ports:
+      # Medkit UI
+      - "3000:80"
