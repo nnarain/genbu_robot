@@ -11,7 +11,6 @@ robot_ontology_register_directory(
 
 install(
   DIRECTORY
-    launch
     ontology
   DESTINATION share/${PROJECT_NAME}
 )

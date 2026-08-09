@@ -1,16 +1,12 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix sosa: <package:sosa_ontology_vendor> .
 @prefix sensor: <http://example.org/sensor#> .
 @prefix ydlidar: <http://example.org/ydlidar#> .
 
-sensor:Lidar
-    a rdfs:Class ;
-    rdfs:subClassOf sosa:Sensor .
-
 ydlidar:Lidar
     a rdfs:Class ;
-    rdfs:subClassOf sensor:Lidar .
+    rdfs:subClassOf sensor:Lidar2D .
 
 ydlidar:X2L
     a rdfs:Class ;

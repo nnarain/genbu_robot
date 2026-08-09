@@ -1,0 +1,3 @@
+fault_manager:
+  ros__parameters:
+    database_path: /tmp/ros2_medkit/faults.db

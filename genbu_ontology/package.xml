@@ -12,6 +12,7 @@
   <depend>robot_ontology_publisher</depend>
   <depend>sosa_ontology_vendor</depend>
   <depend>ament_robot_ontology</depend>
+  <depend>robot_hardware_ontology</depend>
 
   <export>
     <build_type>ament_cmake</build_type>
