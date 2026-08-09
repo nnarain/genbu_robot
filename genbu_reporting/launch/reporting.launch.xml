@@ -2,7 +2,7 @@
   <node pkg="diagnostic_aggregator" exec="aggregator_node" name="diagnostic_aggregator" output="screen">
     <param from="$(find-pkg-share genbu_reporting)/config/diagnostic_aggregator.yaml" />
   </node>
-  <node pkg="ros2_medkit_fault_manager" exec="fault_manager" name="fault_manager" output="screen">
-    <param name="healing_enabled" value="true" />
-  </node>
+  <include file="$(find-pkg-share ros2_medkit_fault_manager)/launch/fault_manager.launch.py">
+    <arg name="params_file" value="$(find-pkg-share genbu_reporting)/config/fault_manager.yaml" />
+  </include>
 </launch>

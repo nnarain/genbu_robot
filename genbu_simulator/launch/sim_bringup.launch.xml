@@ -16,10 +16,13 @@
     <arg name="use_sim_time" value="true" />
   </include>
 
+  <!-- Reporting stack -->
+  <include file="$(find-pkg-share genbu_reporting)/launch/reporting.launch.xml" />
+
   <!-- Spawn the robot entity in Gazebo -->
   <node pkg="ros_gz_sim" exec="create" name="spawn_robot" output="screen"
     args="-topic /robot_description -name $(var robot_name) -allow_renaming true" />
 
-<!-- Gazebo <-> ROS 2 topic bridges -->
+  <!-- Gazebo <-> ROS 2 topic bridges -->
   <include file="$(find-pkg-share genbu_simulator)/launch/gz_bridges.launch.xml" />
 </launch>

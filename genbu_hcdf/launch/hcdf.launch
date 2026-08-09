@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="genbu_hcdf" exec="hcdf_publisher.py" name="hcdf_publisher" output="screen">
+    <param name="hcdf_file" value="$(find-pkg-share genbu_hcdf)/hcdf/robot.hcdf"/>
+  </node>
+</launch>
