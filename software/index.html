@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://nnarain.github.io/genbu_robot/software/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Software - Genbu Robot</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../static/styles/main.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Software";
+        var mkdocs_page_input_path = "software/index.md";
+        var mkdocs_page_url = "/genbu_robot/software/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="..">
+          <img src="../genbu-logo.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../logs/">Logs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../hardware/">Hardware</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Software</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#deployment">Deployment</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ansible-recommended">Ansible (recommended)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#updating-the-debian-package">Updating the Debian Package</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#on-the-robot-self-update">On the robot (self-update)</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#from-a-remote-machine-ansible">From a remote machine (Ansible)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#updating-the-docker-image">Updating the Docker Image</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#foxglove">Foxglove</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#enabling-disabling">Enabling / Disabling</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#starting-the-foxglove-bridge">Starting the Foxglove Bridge</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#accessing-foxglove">Accessing Foxglove</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#medkit-sovd-web-ui">Medkit SOVD Web UI</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#enabling-disabling_1">Enabling / Disabling</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#starting-the-web-ui">Starting the Web UI</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#accessing-the-web-ui">Accessing the Web UI</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#netplan-auto-recovery">Netplan Auto-Recovery</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#what-it-does">What it does</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#manual-recovery">Manual Recovery</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#local-development">Local Development</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ydlidar-sdk-prerequisite">YDLidar SDK prerequisite</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../simulation/">Simulation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Genbu Robot</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Software</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="software">Software</h1>
+<p>Software documentation.</p>
+<h2 id="deployment">Deployment</h2>
+<h3 id="ansible-recommended">Ansible (recommended)</h3>
+<p>The <code>ansible/</code> directory in this repository contains a playbook that provisions a clean Raspberry Pi OS image with everything needed to run the Genbu robot software stack.</p>
+<p><strong>Prerequisites (on your local machine)</strong></p>
+<pre><code class="language-bash">pip install ansible
+</code></pre>
+<p><strong>Steps</strong></p>
+<ol>
+<li>
+<p>Flash <a href="https://www.raspberrypi.com/software/">Raspberry Pi OS Lite</a> onto an SD card and boot the Pi.</p>
+</li>
+<li>
+<p>Edit <code>ansible/inventory.yml</code> and set the correct IP address for your Raspberry Pi:</p>
+</li>
+</ol>
+<pre><code class="language-yaml">all:
+  hosts:
+    genbu:
+      ansible_host: 192.168.1.100  # replace with your Raspberry Pi's IP address
+      ansible_user: robot
+</code></pre>
+<ol>
+<li>Run the provisioning playbook from the repository root:</li>
+</ol>
+<pre><code class="language-bash">ansible-playbook -i ansible/inventory.yml ansible/provision.yml --ask-pass
+</code></pre>
+<p>The playbook will:</p>
+<ul>
+<li>Install Docker Engine</li>
+<li>Download and install the latest <code>genbu-robot</code> Debian package from GitHub releases</li>
+</ul>
+<h3 id="updating-the-debian-package">Updating the Debian Package</h3>
+<h4 id="on-the-robot-self-update">On the robot (self-update)</h4>
+<p>The <code>genbu-robot-update</code> script is installed on the robot as part of the Debian package and provides a simple way to pull and install the latest release directly from GitHub:</p>
+<pre><code class="language-bash">sudo genbu-robot-update
+</code></pre>
+<p>This will download the latest <code>genbu-robot</code> Debian package for the current architecture from GitHub releases and install it.</p>
+<h4 id="from-a-remote-machine-ansible">From a remote machine (Ansible)</h4>
+<p>To update the <code>genbu-robot</code> Debian package to the latest release without re-running the full provisioning playbook:</p>
+<pre><code class="language-bash">ansible-playbook -i ansible/inventory.yml ansible/update.yml --ask-become-pass
+</code></pre>
+<p>This will remove the currently installed package and install the latest version from GitHub releases.</p>
+<h3 id="updating-the-docker-image">Updating the Docker Image</h3>
+<p>The Docker image is <strong>not</strong> pulled automatically on startup. To pull the latest image manually, use the <code>genbu-robot-docker-update</code> script:</p>
+<pre><code class="language-bash">sudo genbu-robot-docker-update
+</code></pre>
+<p>This script will:</p>
+<ol>
+<li>Prune unused Docker images to free disk space before pulling.</li>
+<li>Pull the latest image defined in <code>/etc/genbu-robot/docker-compose.yml</code>.</li>
+<li>Prune any dangling images left over after the pull.</li>
+</ol>
+<p>After updating the image, restart the service to use it:</p>
+<pre><code class="language-bash">sudo systemctl restart robot
+</code></pre>
+<h2 id="foxglove">Foxglove</h2>
+<p><a href="https://foxglove.dev/">Foxglove</a> provides a web-based visualization and debugging interface for ROS systems.</p>
+<h3 id="enabling-disabling">Enabling / Disabling</h3>
+<p>Foxglove is enabled by default. To disable it, set <code>ENABLE_FOXGLOVE=false</code> in <code>/etc/default/genbu-robot</code>:</p>
+<pre><code class="language-ini">ENABLE_FOXGLOVE=false
+</code></pre>
+<h3 id="starting-the-foxglove-bridge">Starting the Foxglove Bridge</h3>
+<p>The <code>genbu_web</code> package contains a launch file that starts the Foxglove bridge:</p>
+<pre><code class="language-bash">ros2 launch genbu_web web.launch.xml
+</code></pre>
+<p>This starts the bridge on port <code>8765</code>.</p>
+<h3 id="accessing-foxglove">Accessing Foxglove</h3>
+<ol>
+<li>Open <a href="https://app.foxglove.dev">https://app.foxglove.dev</a> in your browser (or use the desktop app).</li>
+<li>Click <strong>Open connection</strong>.</li>
+<li>Select <strong>Rosbridge / Foxglove WebSocket</strong> and enter the WebSocket URL:</li>
+</ol>
+<pre><code>ws://&lt;robot-ip&gt;:8765
+</code></pre>
+<p>Replace <code>&lt;robot-ip&gt;</code> with the IP address of your robot.</p>
+<h2 id="medkit-sovd-web-ui">Medkit SOVD Web UI</h2>
+<p><a href="https://github.com/selfpatch/ros2_medkit">ros2_medkit</a> exposes a diagnostic REST API following the SOVD (Service-Oriented Vehicle Diagnostics) standard. The <strong>medkit web UI</strong> is a lightweight browser-based interface for browsing the SOVD entity tree.</p>
+<h3 id="enabling-disabling_1">Enabling / Disabling</h3>
+<p>Medkit is enabled by default. To disable it, set <code>ENABLE_MEDKIT=false</code> in <code>/etc/default/genbu-robot</code>:</p>
+<pre><code class="language-ini">ENABLE_MEDKIT=false
+</code></pre>
+<h3 id="starting-the-web-ui">Starting the Web UI</h3>
+<p>The web UI is started automatically as part of the Docker Compose stack:</p>
+<pre><code class="language-bash">docker compose -f /etc/genbu-robot/docker-compose.yml up
+</code></pre>
+<p>It runs as the <code>ros2_medkit_web_ui</code> container and is accessible on host port <strong>3000</strong> (mapped from container port 80).</p>
+<h3 id="accessing-the-web-ui">Accessing the Web UI</h3>
+<ol>
+<li>Open <code>http://&lt;robot-ip&gt;:3000</code> in your browser.</li>
+<li>In the connection dialog, enter the medkit gateway URL:</li>
+</ol>
+<pre><code>http://&lt;robot-ip&gt;:8080
+</code></pre>
+<ol>
+<li>Click <strong>Connect</strong> to browse the entity tree.</li>
+</ol>
+<p>Replace <code>&lt;robot-ip&gt;</code> with the IP address of your robot.</p>
+<h2 id="netplan-auto-recovery">Netplan Auto-Recovery</h2>
+<p>The Genbu provisioning playbook installs a one-shot systemd service (<code>genbu-netplan-recovery</code>) that runs on every boot to guard against corrupted or empty Netplan configuration files.</p>
+<h3 id="what-it-does">What it does</h3>
+<p>On each boot the service:</p>
+<ol>
+<li>Checks whether <code>/etc/netplan/</code> is healthy:</li>
+<li>If any <code>90-nm-*.yaml</code> file exists, none of them may be empty (if no such files exist at all, this check is skipped — absence is valid when <code>wlan0</code> is configured via a hand-crafted YAML).</li>
+<li>At least one YAML file references <code>wlan0</code>.</li>
+<li><strong>Healthy</strong> → backs up <code>/etc/netplan/</code> to <code>/var/lib/genbu/netplan-config.tar.gz</code>.</li>
+<li><strong>Corrupted</strong> → moves the broken config to <code>/etc/netplan.corrupted.&lt;timestamp&gt;</code>, restores from the backup, and restarts NetworkManager.</li>
+</ol>
+<p>All actions are logged to <code>/var/log/genbu-netplan-recovery.log</code> and the systemd journal:</p>
+<pre><code class="language-bash">journalctl -u genbu-netplan-recovery
+</code></pre>
+<h3 id="manual-recovery">Manual Recovery</h3>
+<p>If the service cannot auto-recover (e.g. no backup exists yet), connect via serial console and run:</p>
+<pre><code class="language-bash"># Inspect backup contents
+tar -tzf /var/lib/genbu/netplan-config.tar.gz
+
+# Restore manually
+sudo tar -xzf /var/lib/genbu/netplan-config.tar.gz -C /etc
+
+# Restart networking
+sudo systemctl restart NetworkManager
+
+# Verify
+nmcli device status
+</code></pre>
+<p>The corrupted files are preserved under <code>/etc/netplan.corrupted.&lt;timestamp&gt;</code> for post-mortem inspection.</p>
+<h2 id="local-development">Local Development</h2>
+<p>As this is a docker based system updates to the source primarily occurs using <code>docker pull</code>. However there is always the need for local software development. Synchronizing source code between machines can be a pain. So one solution here is to use <code>docker context</code> to build remotely on the raspberry pi while keeping the source workspace local.</p>
+<h3 id="ydlidar-sdk-prerequisite">YDLidar SDK prerequisite</h3>
+<p>The ROS 2 package <code>ydlidar_ros2_driver</code> depends on the native <a href="https://github.com/YDLIDAR/YDLidar-SDK"><code>YDLidar-SDK</code></a>, which must be built and installed before running <code>colcon build</code> in a fresh workspace.</p>
+<p>If your workspace was created from <code>genbu_robot.repos</code>, the SDK is imported under <code>/ros_ws/src/YDLIDAR/YDLidar-SDK</code>. Build and install it with:</p>
+<pre><code class="language-bash">mkdir -p /tmp/ydlidar-sdk-build
+cd /tmp/ydlidar-sdk-build
+cmake /ros_ws/src/YDLIDAR/YDLidar-SDK -DCMAKE_INSTALL_PREFIX=/usr/local
+make -j&quot;$(nproc)&quot;
+sudo make install
+</code></pre>
+<p><strong>Note:</strong> The build is performed outside <code>/ros_ws</code> to isolate the SDK from source tree changes. CMake will discover the installed SDK via <code>ydlidar_sdkConfig.cmake</code> in <code>/usr/local/lib/cmake</code> during <code>colcon build</code>.</p>
+<pre><code class="language-bash">docker context create robot --docker &quot;host=ssh://&lt;user&gt;@&lt;ip&gt;&quot;
+</code></pre>
+<p>From <code>genbu_robot</code> package.</p>
+<pre><code class="language-bash">docker build -t genbu:dev -f .\docker\Dockerfile .
+</code></pre>
+<p>On the Raspberry Pi, update <code>/etc/default/genbu-robot</code> to point to the custom image:</p>
+<pre><code class="language-bash">nano /etc/default/genbu-robot
+</code></pre>
+<pre><code class="language-ini">GENBU_IMAGE=genbu:dev
+</code></pre>
+<p>To bring the stack up or down manually using Docker Compose:</p>
+<pre><code class="language-bash"># Bring up
+GENBU_IMAGE=genbu:dev docker compose -f /etc/genbu-robot/docker-compose.yml up
+
+# Tear down
+docker compose -f /etc/genbu-robot/docker-compose.yml down
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../hardware/" class="btn btn-neutral float-left" title="Hardware"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../simulation/" class="btn btn-neutral float-right" title="Simulation">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../hardware/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../simulation/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
