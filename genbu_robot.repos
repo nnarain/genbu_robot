@@ -15,6 +15,10 @@ repositories:
     type: git
     url: https://github.com/nnarain/robot_ontology.git
     version: devel
+  nnarain/hcdformat:
+    type: git
+    url: https://github.com/nnarain/hcdformat.git
+    version: main
   nnarain/hcdf_robot_generator:
     type: git
     url: https://github.com/nnarain/hcdf_robot_generator.git
