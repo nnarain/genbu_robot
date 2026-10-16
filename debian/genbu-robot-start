@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GENBU_COMPOSE_FILE="${GENBU_COMPOSE_FILE:-/etc/genbu-robot/docker-compose.yml}"
+GENBU_PIXI_DIR="${GENBU_PIXI_DIR:-/etc/genbu-robot}"
+GENBU_PIXI_ENV="${GENBU_PIXI_ENV:-robot}"
 
-exec docker compose -f "${GENBU_COMPOSE_FILE}" up --remove-orphans
+cd "${GENBU_PIXI_DIR}"
+
+# pixi run installs/syncs the environment from pixi.lock on first start (and
+# after package updates that ship a new lock file), then launches the stack.
+exec /usr/local/bin/pixi run \
+    --manifest-path "${GENBU_PIXI_DIR}/pixi.toml" \
+    -e "${GENBU_PIXI_ENV}" \
+    ros2 launch genbu_bringup robot.launch.xml

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# genbu-robot-install-pixi: install the pixi binary to /usr/local/bin.
+#
+# The genbu-robot package is Architecture: all, so the pixi binary cannot be
+# embedded in the .deb; it is downloaded at package install time for the host
+# architecture. Safe to re-run: exits immediately if pixi is already present.
+#
+# Usage: sudo genbu-robot-install-pixi
+
+PIXI_BIN="/usr/local/bin/pixi"
+
+if [ -x "${PIXI_BIN}" ]; then
+    echo "[genbu-robot-install-pixi] pixi already installed at ${PIXI_BIN}, skipping."
+    exit 0
+fi
+
+echo "[genbu-robot-install-pixi] installing pixi to ${PIXI_BIN} ..."
+
+# PIXI_HOME places the binary in /usr/local/bin; PIXI_NO_PATH_UPDATE skips
+# shell profile edits (this is a system-wide install).
+if ! curl -fsSL https://pixi.sh/install.sh | PIXI_HOME=/usr/local PIXI_NO_PATH_UPDATE=1 sh; then
+    echo "[genbu-robot-install-pixi] error: failed to install pixi" >&2
+    exit 1
+fi
+
+echo "[genbu-robot-install-pixi] done: $("${PIXI_BIN}" --version)"

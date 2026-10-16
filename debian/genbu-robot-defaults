@@ -1,7 +1,8 @@
-# Genbu robot container configuration
-GENBU_IMAGE=ghcr.io/nnarain/genbu_robot:latest
-# Path to the docker compose file
-GENBU_COMPOSE_FILE=/etc/genbu-robot/docker-compose.yml
+# Genbu robot pixi environment configuration
+# Directory containing pixi.toml / pixi.lock
+GENBU_PIXI_DIR=/etc/genbu-robot
+# Pixi environment to run
+GENBU_PIXI_ENV=robot
 
 # Feature flags (set to 'false' to disable)
 ENABLE_FOXGLOVE=true

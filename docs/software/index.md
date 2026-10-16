@@ -36,8 +36,9 @@ ansible-playbook -i ansible/inventory.yml ansible/provision.yml --ask-pass
 
 The playbook will:
 
-- Install Docker Engine
 - Download and install the latest `genbu-robot` Debian package from GitHub releases
+
+The Debian package installs the [pixi](https://pixi.sh) binary to `/usr/local/bin` and the robot's pixi project (`pixi.toml` / `pixi.lock`) to `/etc/genbu-robot/`. The `robot` systemd service runs the stack via `pixi run -e robot`, which downloads the ROS 2 Jazzy environment on first start.
 
 ### Updating the Debian Package
 
@@ -61,25 +62,17 @@ ansible-playbook -i ansible/inventory.yml ansible/update.yml --ask-become-pass
 
 This will remove the currently installed package and install the latest version from GitHub releases.
 
-### Updating the Docker Image
+### Updating the pixi environment
 
-The Docker image is **not** pulled automatically on startup. To pull the latest image manually, use the `genbu-robot-docker-update` script:
+The pixi environment is **not** updated automatically at runtime. It is defined by the `pixi.toml` / `pixi.lock` files shipped in the Debian package at `/etc/genbu-robot/`.
 
-```bash
-sudo genbu-robot-docker-update
-```
-
-This script will:
-
-1. Prune unused Docker images to free disk space before pulling.
-2. Pull the latest image defined in `/etc/genbu-robot/docker-compose.yml`.
-3. Prune any dangling images left over after the pull.
-
-After updating the image, restart the service to use it:
+After updating the Debian package, restart the service to apply the new environment:
 
 ```bash
 sudo systemctl restart robot
 ```
+
+On restart, `pixi run` syncs the environment in `/etc/genbu-robot/.pixi` to the newly installed `pixi.lock` before launching.
 
 ## Foxglove
 
@@ -129,13 +122,9 @@ ENABLE_MEDKIT=false
 
 ### Starting the Web UI
 
-The web UI is started automatically as part of the Docker Compose stack:
+The medkit gateway is started automatically by the `robot` systemd service (as part of `web.launch.xml`) and is accessible on port **8080**.
 
-```bash
-docker compose -f /etc/genbu-robot/docker-compose.yml up
-```
-
-It runs as the `ros2_medkit_web_ui` container and is accessible on host port **3000** (mapped from container port 80).
+> **Note:** The `ros2_medkit_web_ui` web frontend was previously deployed as a Docker container on port 3000 and is not part of the pixi-based bringup. Run it separately if needed (see the [ros2_medkit_web_ui](https://github.com/selfpatch/ros2_medkit_web_ui) project).
 
 ### Accessing the Web UI
 
@@ -192,7 +181,13 @@ The corrupted files are preserved under `/etc/netplan.corrupted.<timestamp>` for
 
 ## Local Development
 
-As this is a docker based system updates to the source primarily occurs using `docker pull`. However there is always the need for local software development. Synchronizing source code between machines can be a pain. So one solution here is to use `docker context` to build remotely on the raspberry pi while keeping the source workspace local.
+The robot runs a pixi-managed environment, so software updates flow through new releases of the Debian package, which ships updated `pixi.toml` / `pixi.lock` files. For local development, use the pixi tasks defined in `pixi.toml` at the repository root:
+
+- `pixi run build` — build the colcon workspace
+- `pixi run sim` — build and launch the Gazebo simulation
+- `pixi run robot` — build and launch the robot stack from source
+
+To test changes on the robot itself, build a new Debian package (`dpkg-buildpackage -us -uc -b`), copy it to the Pi, and install it — or run a source workspace directly on the Pi using the `robot-src` pixi environment.
 
 ### YDLidar SDK prerequisite
 
@@ -209,33 +204,3 @@ sudo make install
 ```
 
 **Note:** The build is performed outside `/ros_ws` to isolate the SDK from source tree changes. CMake will discover the installed SDK via `ydlidar_sdkConfig.cmake` in `/usr/local/lib/cmake` during `colcon build`.
-
-```bash
-docker context create robot --docker "host=ssh://<user>@<ip>"
-```
-
-From `genbu_robot` package.
-
-```bash
-docker build -t genbu:dev -f .\docker\Dockerfile .
-```
-
-On the Raspberry Pi, update `/etc/default/genbu-robot` to point to the custom image:
-
-```bash
-nano /etc/default/genbu-robot
-```
-
-```ini
-GENBU_IMAGE=genbu:dev
-```
-
-To bring the stack up or down manually using Docker Compose:
-
-```bash
-# Bring up
-GENBU_IMAGE=genbu:dev docker compose -f /etc/genbu-robot/docker-compose.yml up
-
-# Tear down
-docker compose -f /etc/genbu-robot/docker-compose.yml down
-```

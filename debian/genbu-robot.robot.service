@@ -1,14 +1,12 @@
 [Unit]
-Description=Genbu Robot Docker Service
-After=network-online.target docker.service
+Description=Genbu Robot Service
+After=network-online.target
 Wants=network-online.target
-Requires=docker.service
 
 [Service]
 Type=simple
 EnvironmentFile=-/etc/default/genbu-robot
 ExecStart=/usr/bin/genbu-robot-start
-ExecStop=/usr/bin/docker compose -f /etc/genbu-robot/docker-compose.yml down
 Restart=always
 RestartSec=5
 TimeoutStartSec=0

@@ -3,6 +3,9 @@ set -e
 
 case "$1" in
     configure)
+        # Install the pixi binary (best-effort: needs network access to pixi.sh).
+        /usr/bin/genbu-robot-install-pixi || true
+
         if [ -d /run/systemd/system ]; then
             systemctl enable bluetooth || true
             systemctl start bluetooth || true
