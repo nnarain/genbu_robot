@@ -1,6 +1,9 @@
 <launch>
   <arg name="use_realsense" default="false"/>
 
+  <!-- Description -->
+  <include file="$(find-pkg-share genbu_description)/launch/description.launch" />
+
   <!-- Hardware drivers -->
   <include file="$(find-pkg-share genbu_bringup)/launch/hardware.launch.xml">
     <arg name="use_realsense" value="$(var use_realsense)" />
@@ -10,6 +13,9 @@
   <include file="$(find-pkg-share genbu_bringup)/launch/navigation.launch.xml">
     <arg name="use_sim_time" value="false" />
   </include>
+
+  <!-- Reporting -->
+  <include file="$(find-pkg-share genbu_reporting)/launch/reporting.launch.xml" />
 
   <!-- Web services -->
   <include file="$(find-pkg-share genbu_web)/launch/web.launch.xml" />
