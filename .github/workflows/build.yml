@@ -23,10 +23,8 @@ jobs:
           pixi-version: v0.81.0
           manifest-path: ros_ws/src/genbu_robot/ci/ros-build/pixi.toml
           cache: true
-          run-install: false
-
-      - name: Install Pixi build environment
-        run: pixi install --manifest-path "$PIXI_MANIFEST" --locked
+          run-install: true
+          locked: true
 
       - name: Import external repositories
         run: |
