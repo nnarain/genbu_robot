@@ -5,6 +5,8 @@ genbu-robot (0.5.0-1) unstable; urgency=medium
     stack via `pixi run -e robot` from the systemd service.
   * Add genbu-robot-install-pixi: installs the pixi binary to
     /usr/local/bin at package install time.
+  * Ship /etc/pixi/config.toml with tls-root-certs = "system" so pixi
+    trusts the private ros.home.lan CA from the system certificate store.
   * Remove Docker dependencies, docker-compose.yml installation, and
     genbu-robot-docker-update.
 

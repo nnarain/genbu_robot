@@ -1,0 +1,7 @@
+# Use the system certificate store for TLS verification.
+#
+# Standalone pixi binaries default to bundled Mozilla roots (webpki), which do
+# not include the private CA that signs https://ros.home.lan. The system store
+# trusts it once the CA is installed under /usr/local/share/ca-certificates/
+# (followed by `update-ca-certificates`).
+tls-root-certs = "system"
