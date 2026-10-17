@@ -1,0 +1,33 @@
+[workspace]
+name = "genbu-ci-build"
+channels = ["https://prefix.dev/robostack-jazzy", "conda-forge"]
+platforms = ["linux-64"]
+
+[dependencies]
+cmake = ">=3.28,<4"
+ninja = "*"
+compilers = "*"
+pkg-config = "*"
+colcon-common-extensions = "*"
+vcstool = "*"
+python = ">=3.12,<3.13"
+pip = "*"
+maturin = ">=1.7,<2"
+rust = "*"
+ros-jazzy-ros-base = "*"
+ros-jazzy-ament-cmake = "*"
+ros-jazzy-diagnostic-aggregator = "*"
+ros-jazzy-foxglove-bridge = "*"
+ros-jazzy-joint-state-publisher = "*"
+ros-jazzy-nav2-bringup = "*"
+ros-jazzy-nav2-common = "*"
+ros-jazzy-ros-gz-bridge = "*"
+ros-jazzy-ros-gz-sim = "*"
+ros-jazzy-ros2-medkit-fault-manager = "*"
+ros-jazzy-ros2-medkit-gateway = "*"
+ros-jazzy-rviz2 = "*"
+ros-jazzy-robot-state-publisher = "*"
+ros-jazzy-slam-toolbox = "*"
+ros-jazzy-xacro = "*"
+numpy = "*"
+scipy = "*"

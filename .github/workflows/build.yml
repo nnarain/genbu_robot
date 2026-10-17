@@ -10,52 +10,50 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    container:
-      image: ros:${{ matrix.ros_distro }}
-    strategy:
-      matrix:
-        ros_distro: [jazzy]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          path: ros_ws/src/genbu_robot
 
-      - name: Install build tools
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends \
-            python3-vcstool \
-            python3-rosdep \
-            build-essential \
-            rsync
+      - name: Set up Pixi
+        uses: prefix-dev/setup-pixi@v0.8.8
+        with:
+          pixi-version: v0.81.0
+          manifest-path: ros_ws/src/genbu_robot/ci/ros-build/pixi.toml
+          cache: true
+          run-install: false
+
+      - name: Install Pixi build environment
+        run: pixi install --manifest-path "$PIXI_MANIFEST" --locked
 
       - name: Import external repositories
         run: |
-          mkdir -p /ros_ws/src
-          vcs import /ros_ws/src < genbu_robot.repos
+          pixi run --manifest-path "$PIXI_MANIFEST" \
+            vcs import "$ROS_WS/src" < "$ROS_WS/src/genbu_robot/genbu_robot.repos"
 
-      - name: Copy local packages to workspace
-        run: rsync -a --exclude='.git' --exclude='.github' . /ros_ws/src/genbu_robot/
-
-      - name: Install rosdep dependencies
+      - name: Build and install YDLidar SDK
         run: |
-          if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi
-          rosdep update
-          cd /ros_ws
-          rosdep install --from-paths src --ignore-src -r -y
-
-      - name: Build and install YDLidar SDK (external build for cache isolation)
-        run: |
-          # Build SDK outside workspace to keep it in separate cached layer
-          mkdir -p /tmp/ydlidar-sdk-build
-          cd /tmp/ydlidar-sdk-build
-          cmake /ros_ws/src/YDLIDAR/YDLidar-SDK -DCMAKE_INSTALL_PREFIX=/usr/local
-          make -j"$(nproc)"
-          make install
+          pixi run --manifest-path "$PIXI_MANIFEST" \
+            bash -euo pipefail -c '
+              cmake -S "$ROS_WS/src/YDLIDAR/YDLidar-SDK" -B /tmp/ydlidar-sdk-build \
+                -G Ninja -DCMAKE_INSTALL_PREFIX="$CONDA_PREFIX"
+              cmake --build /tmp/ydlidar-sdk-build --parallel
+              cmake --install /tmp/ydlidar-sdk-build
+            '
 
       - name: Build workspace
         run: |
-          cd /ros_ws
-          . /opt/ros/${{ matrix.ros_distro }}/setup.sh
-          # SDK discovery: CMake will find ydlidar_sdkConfig.cmake in /usr/local/lib/cmake
-          colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr/local
+          pixi run --manifest-path "$PIXI_MANIFEST" \
+            bash -euo pipefail -c '
+              cd "$ROS_WS"
+              export LIBRARY_PATH="$CONDA_PREFIX/lib:${LIBRARY_PATH:-}"
+              colcon build --cmake-args \
+                -G Ninja \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_PREFIX_PATH="$CONDA_PREFIX:${CMAKE_PREFIX_PATH:-}"
+            '
+    env:
+      PIXI_MANIFEST: ${{ github.workspace }}/ros_ws/src/genbu_robot/ci/ros-build/pixi.toml
+      ROS_WS: ${{ github.workspace }}/ros_ws

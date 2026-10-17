@@ -13,6 +13,10 @@
   <depend>teleop_twist_joy</depend>
   <depend>ydlidar_ros2_driver</depend>
   <depend>genbu_navigation</depend>
+  <depend>genbu_description</depend>
+  <depend>genbu_control</depend>
+  <depend>genbu_reporting</depend>
+  <depend>genbu_web</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
