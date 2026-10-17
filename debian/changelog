@@ -1,3 +1,17 @@
+genbu-robot (0.5.0-1) unstable; urgency=medium
+
+  * Replace Docker bringup with pixi bringup.
+  * Ship pixi.toml and pixi.lock in /etc/genbu-robot/ and run the robot
+    stack via `pixi run -e robot` from the systemd service.
+  * Add genbu-robot-install-pixi: installs the pixi binary to
+    /usr/local/bin at package install time.
+  * Ship /etc/pixi/config.toml with tls-root-certs = "system" so pixi
+    trusts the private ros.home.lan CA from the system certificate store.
+  * Remove Docker dependencies, docker-compose.yml installation, and
+    genbu-robot-docker-update.
+
+ -- Natesh Narain <nnaraindev@gmail.com>  Thu, 15 Oct 2026 00:00:00 +0000
+
 genbu-robot (0.4.0-1) unstable; urgency=medium
 
   * Add genbu-robot-update script for self-updating the Debian package from

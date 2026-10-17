@@ -1,0 +1,47 @@
+[workspace]
+name = "genbu-robot"
+channels = [
+  "https://ros.home.lan/jazzy",
+  "https://prefix.dev/robostack-jazzy",
+  "conda-forge",
+]
+platforms = ["linux-64", "linux-aarch64"]
+preview = ["pixi-build"]            # for the pixi-build-* backends
+
+# ── shared: what the robot needs to run ─────────────────────────────────────
+[feature.ros.dependencies]
+ros-jazzy-ros-base = "*"
+ros-jazzy-genbu-bringup = "*"
+
+# ── desktop only ────────────────────────────────────────────────────────────
+[feature.sim.dependencies]
+ros-jazzy-ros-gz-sim = "*"
+ros-jazzy-ros-gz-bridge = "*"
+ros-jazzy-rviz2 = "*"
+ros-jazzy-genbu-simulator = "*"
+
+# ── build toolchain: WSL, and on-Pi source builds ───────────────────────────
+[feature.build.dependencies]
+ros-jazzy-ament-cmake = "*"
+cmake = "*"
+ninja = "*"
+compilers = "*"
+pkg-config = "*"
+colcon-common-extensions = "*"
+vcstool = "*"
+
+# ── environments ────────────────────────────────────────────────────────────
+# One solve-group: all environments resolve together, so shared packages land on
+# identical versions in all three and `robot` is a true subset of `dev`.
+[environments]
+default   = { features = ["ros", "sim", "build"], solve-group = "genbu" }
+dev       = { features = ["ros", "sim", "build"], solve-group = "genbu" }
+robot-src = { features = ["ros", "build"],        solve-group = "genbu" }
+robot     = { features = ["ros"],                 solve-group = "genbu" }
+
+[tasks]
+# pixi runs tasks from the manifest's dir; colcon must run from the workspace root.
+build = "cd ../.. && colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+sim   = "cd ../.. && colcon build --symlink-install && . install/setup.sh && ros2 launch genbu_simulator sim_navigation.launch.xml"
+robot = "cd ../.. && colcon build --symlink-install && . install/setup.sh && ros2 launch genbu_bringup robot.launch.xml"
+

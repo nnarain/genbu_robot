@@ -10,12 +10,16 @@ override_dh_install:
 		debian/genbu-robot/usr/bin/genbu-robot-start
 	install -D -m 755 debian/genbu-robot-update \
 		debian/genbu-robot/usr/bin/genbu-robot-update
-	install -D -m 755 debian/genbu-robot-docker-update \
-		debian/genbu-robot/usr/bin/genbu-robot-docker-update
 	install -D -m 755 debian/genbu-robot-disable-swap \
 		debian/genbu-robot/usr/bin/genbu-robot-disable-swap
-	install -D -m 644 docker/docker-compose.yml \
-		debian/genbu-robot/etc/genbu-robot/docker-compose.yml
+	install -D -m 755 debian/genbu-robot-install-pixi \
+		debian/genbu-robot/usr/bin/genbu-robot-install-pixi
+	install -D -m 644 debian/pixi-config.toml \
+		debian/genbu-robot/etc/pixi/config.toml
+	install -D -m 644 pixi.toml \
+		debian/genbu-robot/etc/genbu-robot/pixi.toml
+	install -D -m 644 pixi.lock \
+		debian/genbu-robot/etc/genbu-robot/pixi.lock
 
 override_dh_installsystemd:
 	dh_installsystemd --name=robot
