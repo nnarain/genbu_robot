@@ -1,6 +1,8 @@
 # Genbu robot pixi environment configuration
-# Directory containing pixi.toml / pixi.lock
-GENBU_PIXI_DIR=/etc/genbu-robot
+# Source of truth for pixi.toml / pixi.lock (package conffiles)
+GENBU_PIXI_SRC=/etc/genbu-robot
+# Live robot-owned workspace (synced from GENBU_PIXI_SRC on service start)
+GENBU_PIXI_DIR=/opt/genbu-robot
 # Pixi environment to run
 GENBU_PIXI_ENV=robot
 

@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    purge)
+        # Remove the live pixi workspace (environments, caches) that is not
+        # tracked by dpkg.
+        rm -rf /opt/genbu-robot
+        ;;
+esac
+
+#DEBHELPER#

@@ -1,10 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GENBU_PIXI_DIR="${GENBU_PIXI_DIR:-/etc/genbu-robot}"
+GENBU_PIXI_SRC="${GENBU_PIXI_SRC:-/etc/genbu-robot}"
+GENBU_PIXI_DIR="${GENBU_PIXI_DIR:-/opt/genbu-robot}"
 GENBU_PIXI_ENV="${GENBU_PIXI_ENV:-robot}"
 
+# /etc/genbu-robot is the source of truth (package conffiles); /opt/genbu-robot
+# is the live, robot-owned workspace. Sync the manifest/lock so package updates
+# and admin edits in /etc take effect on (re)start. Runs as the robot user, so
+# no root permissions are needed. NOTE: symlinking instead of copying does not
+# work here -- pixi canonicalizes the manifest path and would write .pixi/ and
+# the lock file into /etc/genbu-robot.
+for f in pixi.toml pixi.lock; do
+    if [ -e "${GENBU_PIXI_SRC}/${f}" ]; then
+        cp -u "${GENBU_PIXI_SRC}/${f}" "${GENBU_PIXI_DIR}/${f}"
+    fi
+done
+
 cd "${GENBU_PIXI_DIR}"
+
+# Source the ROS environment setup script
+source /etc/ros/setup.bash
 
 # pixi run installs/syncs the environment from pixi.lock on first start (and
 # after package updates that ship a new lock file), then launches the stack.

@@ -3,6 +3,23 @@ set -e
 
 case "$1" in
     configure)
+        # Create the robot system user/group (robot.service runs as it).
+        if ! getent passwd robot >/dev/null; then
+            useradd --system --user-group \
+                --home-dir /opt/genbu-robot --no-create-home \
+                --shell /usr/sbin/nologin \
+                --comment "Genbu robot service" robot
+        fi
+
+        # /etc/genbu-robot holds the source of truth (conffiles);
+        # /opt/genbu-robot is the robot-writable live workspace where pixi
+        # materializes the environment, so no root is needed for the pixi
+        # store. Seed it here; genbu-robot-start re-syncs on every start.
+        mkdir -p /opt/genbu-robot
+        cp -u /etc/genbu-robot/pixi.toml /opt/genbu-robot/pixi.toml 2>/dev/null || true
+        cp -u /etc/genbu-robot/pixi.lock /opt/genbu-robot/pixi.lock 2>/dev/null || true
+        chown -R robot:robot /opt/genbu-robot
+
         # Install the pixi binary (best-effort: needs network access to pixi.sh).
         /usr/bin/genbu-robot-install-pixi || true
 

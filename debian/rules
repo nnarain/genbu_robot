@@ -20,6 +20,8 @@ override_dh_install:
 		debian/genbu-robot/etc/genbu-robot/pixi.toml
 	install -D -m 644 pixi.lock \
 		debian/genbu-robot/etc/genbu-robot/pixi.lock
+	# Live pixi workspace (ownership set to the robot user in postinst).
+	install -d debian/genbu-robot/opt/genbu-robot
 
 override_dh_installsystemd:
 	dh_installsystemd --name=robot
