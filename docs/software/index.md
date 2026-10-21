@@ -38,7 +38,7 @@ The playbook will:
 
 - Download and install the latest `genbu-robot` Debian package from GitHub releases
 
-The Debian package installs the [pixi](https://pixi.sh) binary to `/usr/local/bin` and the robot's pixi project (`pixi.toml` / `pixi.lock`) to `/etc/genbu-robot/`. The `robot` systemd service runs the stack via `pixi run -e robot`, which downloads the ROS 2 Jazzy environment on first start.
+The Debian package installs the [pixi](https://pixi.sh) binary to `/usr/local/bin`, the robot's pixi project (`pixi.toml` / `pixi.lock`) to `/etc/genbu-robot/`, and an intentionally empty `/etc/ros/setup.bash` customization hook. Add user-specific environment variables or source additional workspaces there; the `robot` systemd service sources it before running `pixi run -e robot`.
 
 ### Updating the Debian Package
 
@@ -72,7 +72,7 @@ After updating the Debian package, restart the service to apply the new environm
 sudo systemctl restart robot
 ```
 
-On restart, `pixi run` syncs the environment in `/etc/genbu-robot/.pixi` to the newly installed `pixi.lock` before launching.
+On restart, the service copies updated manifests from `/etc/genbu-robot/` into the robot-owned workspace at `/opt/genbu-robot/`. Legacy symlinks or hard links to the configuration files are replaced with independent copies so pixi cannot write back into `/etc`. Then `pixi run` syncs the environment in `/opt/genbu-robot/.pixi` to the copied `pixi.lock` before launching.
 
 ## Foxglove
 

@@ -31,8 +31,12 @@ slam_toolbox:
     enable_interactive_mode: true
     use_scan_matching: true
     use_scan_barycenter: true
+    # Check heading change (not just translation) at the ROS scan gate.
+    # With the default (false) the gate is distance-only and turn-in-place
+    # never passes, so no scans are processed and the map stays frozen.
+    check_min_dist_and_heading_precisely: true
     minimum_travel_distance: 0.5
-    minimum_travel_heading: 0.5
+    minimum_travel_heading: 0.17         # ~10 deg; 0.5 rad is too coarse for turn-in-place
     scan_buffer_size: 10
     scan_buffer_maximum_scan_distance: 10.0
     link_match_minimum_response_fine: 0.1
