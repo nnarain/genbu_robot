@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://nnarain.github.io/genbu_robot/hardware/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Hardware - Genbu Robot</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../static/styles/main.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Hardware";
+        var mkdocs_page_input_path = "hardware/index.md";
+        var mkdocs_page_url = "/genbu_robot/hardware/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="..">
+          <img src="../genbu-logo.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../logs/">Logs</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Hardware</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#components">Components</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#interactive-model">Interactive model</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../software/">Software</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../simulation/">Simulation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Genbu Robot</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Hardware</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="hardware">Hardware</h1>
+<p>Hardware components and design documentation.</p>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+<h2 id="components">Components</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+<th>3D Model</th>
+<th>Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://edu.irobot.com/what-we-offer/create-robot">iRobot Create 2</a></td>
+<td>Mobile robot base with integrated wheel encoders, cliff sensors, bumper, and battery</td>
+<td><model-viewer src="assets/meshes/create_2.glb" alt="iRobot Create 2 3D model" auto-rotate camera-controls shadow-intensity="1" style="width: 260px; height: 180px; background: #f5f5f5; border-radius: 8px;"></model-viewer></td>
+<td>N/A</td>
+</tr>
+<tr>
+<td><a href="https://www.ydlidar.com/products/view/6.html">YDLIDAR X2</a></td>
+<td>2D 360° laser scanner, up to 8 m range, 5 Hz scan rate</td>
+<td>N/A</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td><a href="https://www.intelrealsense.com/">Intel RealSense Depth Camera</a></td>
+<td>RGB-D depth camera for visual perception</td>
+<td>N/A</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h2 id="interactive-model">Interactive model</h2>
+<div id="ev-root" style="border:1px solid #374151;border-radius:8px;overflow:hidden;margin:1rem 0;">
+    <canvas id="ev-canvas" style="width:100%;height:500px;display:block;background:#0d1117;"></canvas>
+    <div style="padding:10px 16px;background:#111827;border-top:1px solid #374151;">
+        <label for="ev-slider" style="color:#9ca3af;font-size:13px;">
+            Explode&nbsp;
+            <input type="range" id="ev-slider" min="0" max="100" value="0" style="width:200px;vertical-align:middle;">
+            &nbsp;<span id="ev-pct" style="color:#d1d5db;font-size:13px;display:inline-block;min-width:3em;">0%</span>
+        </label>
+        <span style="float:right;color:#4b5563;font-size:11px;line-height:2.2;">Drag to orbit &middot; Scroll to zoom</span>
+    </div>
+</div>
+
+<script type="module" src="../static/js/exploded-view.js"></script>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../logs/" class="btn btn-neutral float-left" title="Logs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../software/" class="btn btn-neutral float-right" title="Software">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../logs/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../software/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

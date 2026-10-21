@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://nnarain.github.io/genbu_robot/simulation/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Simulation - Genbu Robot</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../static/styles/main.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Simulation";
+        var mkdocs_page_input_path = "simulation/index.md";
+        var mkdocs_page_url = "/genbu_robot/simulation/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="..">
+          <img src="../genbu-logo.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../logs/">Logs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../hardware/">Hardware</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../software/">Software</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Simulation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#launching-the-simulation">Launching the Simulation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#simulation-only">Simulation Only</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#simulation-with-navigation-stack">Simulation with Navigation Stack</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#launch-arguments">Launch Arguments</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#sim_bringuplaunchxml">sim_bringup.launch.xml</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sim_navigationlaunchxml">sim_navigation.launch.xml</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#selecting-a-world">Selecting a World</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#available-worlds">Available Worlds</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#navigation-stack-usage">Navigation Stack Usage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#sending-a-navigation-goal">Sending a Navigation Goal</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tf-tree">TF Tree</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#navigation-stack-architecture">Navigation Stack Architecture</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ros-2-topics">ROS 2 Topics</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#simulation-topics-always-available">Simulation Topics (always available)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#navigation-topics-available-with-sim_navigationlaunchxml">Navigation Topics (available with sim_navigation.launch.xml)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#wsl-non-nvidia-environments">WSL / Non-NVIDIA Environments</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Genbu Robot</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Simulation</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="simulation">Simulation</h1>
+<p>The <code>genbu_simulator</code> package provides a <a href="https://gazebosim.org/">Gazebo</a> simulation environment for the Genbu robot.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>ROS 2 (Jazzy or later)</li>
+<li><code>ros_gz_sim</code>, <code>ros_gz_bridge</code> packages</li>
+<li><code>genbu_description</code> package</li>
+<li><code>nav2_bringup</code>, <code>slam_toolbox</code> packages (required for the navigation stack)</li>
+</ul>
+<h2 id="launching-the-simulation">Launching the Simulation</h2>
+<h3 id="simulation-only">Simulation Only</h3>
+<p>Use <code>sim_bringup.launch.xml</code> to start just the simulator without the navigation stack:</p>
+<pre><code class="language-bash">ros2 launch genbu_simulator sim_bringup.launch.xml
+</code></pre>
+<p>This launch file:</p>
+<ol>
+<li>Starts the Gazebo simulator with the selected world.</li>
+<li>Launches the robot state publisher (with <code>use_sim_time:=true</code>).</li>
+<li>Spawns the Genbu robot into the simulation.</li>
+<li>Bridges sensor and control topics between Gazebo and ROS 2.</li>
+</ol>
+<h3 id="simulation-with-navigation-stack">Simulation with Navigation Stack</h3>
+<p>Use <code>sim_navigation.launch.xml</code> to start the full stack — Gazebo, SLAM Toolbox, Nav2, and RViz — in a single command:</p>
+<pre><code class="language-bash">ros2 launch genbu_simulator sim_navigation.launch.xml
+</code></pre>
+<p>This launch file:</p>
+<ol>
+<li>Starts the Gazebo simulator with the <code>maze</code> world (default).</li>
+<li>Launches the robot state publisher and joint state publisher.</li>
+<li>Spawns the Genbu robot into the simulation.</li>
+<li>Bridges sensor and control topics between Gazebo and ROS 2.</li>
+<li>Starts <a href="https://github.com/SteveMacenski/slam_toolbox">SLAM Toolbox</a> in online async mode for simultaneous localization and mapping.</li>
+<li>Starts the <a href="https://nav2.org/">Nav2</a> navigation stack (planner, controller, behavior trees, and lifecycle manager).</li>
+<li>Opens RViz with the navigation configuration.</li>
+</ol>
+<h2 id="launch-arguments">Launch Arguments</h2>
+<h3 id="sim_bringuplaunchxml"><code>sim_bringup.launch.xml</code></h3>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>world</code></td>
+<td><code>default</code></td>
+<td>Name of the world file to load (see <a href="#available-worlds">Available Worlds</a>).</td>
+</tr>
+<tr>
+<td><code>robot_name</code></td>
+<td><code>genbu</code></td>
+<td>Name assigned to the spawned robot entity in Gazebo.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sim_navigationlaunchxml"><code>sim_navigation.launch.xml</code></h3>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>world</code></td>
+<td><code>maze</code></td>
+<td>Name of the world file to load. Defaults to the maze world for navigation testing.</td>
+</tr>
+<tr>
+<td><code>use_sim_time</code></td>
+<td><code>true</code></td>
+<td>Use simulation clock for all nodes.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="selecting-a-world">Selecting a World</h3>
+<p>Pass the <code>world</code> argument to choose a different simulation environment:</p>
+<pre><code class="language-bash">ros2 launch genbu_simulator sim_bringup.launch.xml world:=obstacle_course
+</code></pre>
+<pre><code class="language-bash">ros2 launch genbu_simulator sim_navigation.launch.xml world:=obstacle_course
+</code></pre>
+<h2 id="available-worlds">Available Worlds</h2>
+<table>
+<thead>
+<tr>
+<th>World</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default</code></td>
+<td>Empty flat plane with directional lighting. Good for basic bring-up testing.</td>
+</tr>
+<tr>
+<td><code>maze</code></td>
+<td>3×3 maze environment. Default world for navigation stack testing.</td>
+</tr>
+<tr>
+<td><code>obstacle_course</code></td>
+<td>Flat plane populated with box pillars and cylinders placed around the robot's starting position to exercise obstacle detection and navigation.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="navigation-stack-usage">Navigation Stack Usage</h2>
+<p>Once <code>sim_navigation.launch.xml</code> is running, RViz opens automatically with the navigation configuration.</p>
+<h3 id="sending-a-navigation-goal">Sending a Navigation Goal</h3>
+<ol>
+<li>In RViz, click the <strong>Nav2 Goal</strong> (or <strong>2D Goal Pose</strong>) button in the toolbar.</li>
+<li>Click and drag in the map view to set the desired goal position and orientation.</li>
+<li>The robot will plan a path and drive to the goal autonomously.</li>
+</ol>
+<h3 id="tf-tree">TF Tree</h3>
+<p>The full TF tree when running with the navigation stack:</p>
+<pre><code>map            ← published by SLAM Toolbox
+└── odom       ← bridged from Gazebo DiffDrive plugin
+    └── base_footprint
+        └── base_link
+            ├── left_wheel_link
+            ├── right_wheel_link
+            ├── front_wheel_link
+            ├── gyro_link
+            └── ydlidar_base_link
+                └── laser
+</code></pre>
+<h3 id="navigation-stack-architecture">Navigation Stack Architecture</h3>
+<pre><code>/goal_pose  (RViz Nav2 Goal tool)
+    → bt_navigator → /plan → controller_server
+                           → /cmd_vel_nav → velocity_smoother
+                                          → /cmd_vel → Gazebo DiffDrive
+</code></pre>
+<h2 id="ros-2-topics">ROS 2 Topics</h2>
+<h3 id="simulation-topics-always-available">Simulation Topics (always available)</h3>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/scan</code></td>
+<td><code>sensor_msgs/msg/LaserScan</code></td>
+<td>Lidar scan data bridged from the Gazebo GPU lidar sensor.</td>
+</tr>
+<tr>
+<td><code>/odom</code></td>
+<td><code>nav_msgs/msg/Odometry</code></td>
+<td>Odometry bridged from the Gazebo DiffDrive plugin.</td>
+</tr>
+<tr>
+<td><code>/tf</code></td>
+<td><code>tf2_msgs/msg/TFMessage</code></td>
+<td>Transform frames bridged from Gazebo (odom → base_footprint).</td>
+</tr>
+<tr>
+<td><code>/clock</code></td>
+<td><code>rosgraph_msgs/msg/Clock</code></td>
+<td>Simulation clock bridged from Gazebo.</td>
+</tr>
+<tr>
+<td><code>/cmd_vel</code></td>
+<td><code>geometry_msgs/msg/Twist</code></td>
+<td>Velocity commands forwarded to the Gazebo DiffDrive plugin.</td>
+</tr>
+<tr>
+<td><code>/robot_description</code></td>
+<td><code>std_msgs/msg/String</code></td>
+<td>URDF published by the robot state publisher.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="navigation-topics-available-with-sim_navigationlaunchxml">Navigation Topics (available with <code>sim_navigation.launch.xml</code>)</h3>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/map</code></td>
+<td><code>nav_msgs/msg/OccupancyGrid</code></td>
+<td>Occupancy grid map built by SLAM Toolbox.</td>
+</tr>
+<tr>
+<td><code>/goal_pose</code></td>
+<td><code>geometry_msgs/msg/PoseStamped</code></td>
+<td>Navigation goal set via RViz or published directly.</td>
+</tr>
+<tr>
+<td><code>/plan</code></td>
+<td><code>nav_msgs/msg/Path</code></td>
+<td>Planned path from the current position to the goal.</td>
+</tr>
+<tr>
+<td><code>/cmd_vel_nav</code></td>
+<td><code>geometry_msgs/msg/Twist</code></td>
+<td>Velocity commands from the Nav2 controller before smoothing.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes">Notes</h2>
+<h3 id="wsl-non-nvidia-environments">WSL / Non-NVIDIA Environments</h3>
+<p>The <code>sim_bringup.launch.xml</code> file automatically sets the following environment variables to enable Mesa software rendering when a hardware GPU is not available (e.g. WSL or CI environments):</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LIBGL_ALWAYS_SOFTWARE</code></td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>GALLIUM_DRIVER</code></td>
+<td><code>llvmpipe</code></td>
+</tr>
+</tbody>
+</table>
+<p>No extra configuration is required; the launch file handles this automatically.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../software/" class="btn btn-neutral float-left" title="Software"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../software/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "create_2.dae": {
+    "glb": "/ros_ws/mesh_assets/meshes/create_2.glb",
+    "name": "create_2.glb",
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "xyz": [
+      0.0,
+      0.0,
+      0.0478
+    ]
+  },
+  "rplidar_a1m8.dae": {
+    "glb": "/ros_ws/mesh_assets/meshes/rplidar_a1m8.glb",
+    "name": "rplidar_a1m8.glb",
+    "rpy": [
+      0.0,
+      0.0,
+      -1.571
+    ],
+    "xyz": [
+      0.042,
+      -0.042,
+      0.089
+    ]
+  }
+}
