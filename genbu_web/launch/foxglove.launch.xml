@@ -1,9 +1,4 @@
 <launch>
-  <let name="mesh_server_port" value="$(env GENBU_MESH_SERVER_PORT 8766)" />
-
-  <node pkg="genbu_web" exec="mesh_server.py" name="mesh_server" output="screen"
-    args="--directory $(find-pkg-share genbu_description)/meshes --port $(var mesh_server_port)" />
-
   <include file="$(find-pkg-share foxglove_bridge)/launch/foxglove_bridge_launch.xml">
     <arg name="port" value="8765" />
   </include>

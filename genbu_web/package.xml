@@ -10,8 +10,6 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>foxglove_bridge</depend>
-  <exec_depend>genbu_description</exec_depend>
-  <exec_depend>python3</exec_depend>
   <depend>ros2_medkit_gateway</depend>
 
   <test_depend>ament_lint_auto</test_depend>

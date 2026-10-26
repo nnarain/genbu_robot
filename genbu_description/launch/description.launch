@@ -1,8 +1,6 @@
 <launch>
   <arg name="use_sim_time" default="false"/>
   <arg name="use_hcdf" default="false"/>
-  <arg name="mesh_base_url" default="package://genbu_description/meshes"/>
-
   <include file="$(find-pkg-share genbu_hcdf)/launch/hcdf.launch"/>
 
   <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher" output="screen" if="$(var use_hcdf)">
@@ -12,7 +10,7 @@
 
   <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher" output="screen" unless="$(var use_hcdf)">
     <param name="use_sim_time" value="$(var use_sim_time)"/>
-    <param name="robot_description" value="$(command 'xacro $(find-pkg-share genbu_description)/urdf/robot.urdf.xacro mesh_base_url:=$(var mesh_base_url)')"/>
+    <param name="robot_description" value="$(command 'xacro $(find-pkg-share genbu_description)/urdf/robot.urdf.xacro')"/>
   </node>
 
   <include file="$(find-pkg-share robot_ontology_publisher)/launch/robot_ontology_publisher.launch.py"/>
