@@ -5,4 +5,8 @@
   <include file="$(find-pkg-share ros2_medkit_fault_manager)/launch/fault_manager.launch.py">
     <arg name="params_file" value="$(find-pkg-share genbu_reporting)/config/fault_manager.yaml" />
   </include>
+
+  <!-- Optional recording of all ROS topics -->
+  <include if="$(env RECORD_BAG false)"
+    file="$(find-pkg-share genbu_reporting)/launch/record_bag.launch.py" />
 </launch>

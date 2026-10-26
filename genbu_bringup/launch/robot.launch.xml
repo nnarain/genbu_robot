@@ -19,8 +19,4 @@
 
   <!-- Web services -->
   <include file="$(find-pkg-share genbu_web)/launch/web.launch.xml" />
-
-  <!-- Optional recording of all ROS topics -->
-  <include if="$(env RECORD_BAG false)"
-    file="$(find-pkg-share genbu_bringup)/launch/record_bag.launch.py" />
 </launch>
