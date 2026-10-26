@@ -96,6 +96,26 @@ ros2 launch genbu_web web.launch.xml
 
 This starts the bridge on port `8765`.
 
+The robot also serves its URDF mesh assets over HTTP on port `8766`, so Foxglove
+clients do not need the robot's ROS packages installed locally. Set
+`GENBU_MESH_SERVER_HOST` in `/etc/default/genbu-robot` to the robot's reachable
+IP address or hostname (the same host used in the Foxglove WebSocket URL):
+
+```ini
+GENBU_MESH_SERVER_HOST=192.168.1.100
+```
+
+The mesh server listens on port `8766`; set `GENBU_MESH_SERVER_PORT` if needed
+to change it. Ensure that port is reachable from the Foxglove client, then
+restart the robot service:
+
+```bash
+sudo systemctl restart robot
+```
+
+Foxglove loads the model mesh from
+`http://<GENBU_MESH_SERVER_HOST>:8766/rplidar_a1m8.dae`.
+
 ### Accessing Foxglove
 
 1. Open [https://app.foxglove.dev](https://app.foxglove.dev) in your browser (or use the desktop app).

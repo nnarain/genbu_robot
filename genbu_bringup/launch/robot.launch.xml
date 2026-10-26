@@ -2,7 +2,10 @@
   <arg name="use_realsense" default="false"/>
 
   <!-- Description -->
-  <include file="$(find-pkg-share genbu_description)/launch/description.launch" />
+  <include file="$(find-pkg-share genbu_description)/launch/description.launch">
+    <arg name="mesh_base_url"
+      value="http://$(env GENBU_MESH_SERVER_HOST localhost):$(env GENBU_MESH_SERVER_PORT 8766)" />
+  </include>
 
   <!-- Hardware drivers -->
   <include file="$(find-pkg-share genbu_bringup)/launch/hardware.launch.xml">

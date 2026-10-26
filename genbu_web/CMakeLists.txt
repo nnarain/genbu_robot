@@ -10,4 +10,9 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(
+  PROGRAMS scripts/mesh_server.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 ament_package()
