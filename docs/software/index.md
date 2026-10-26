@@ -128,7 +128,7 @@ Bag recording is disabled by default. To record all ROS topics to `/mnt/storage/
 RECORD_BAG=true
 ```
 
-Each service start creates a uniquely named bag directory under `/mnt/storage/bags`.
+Each service start creates a uniquely named bag directory under `/mnt/storage/bags`. ROS 2 splits recording when a bag reaches 1 GB or one hour, whichever comes first.
 
 ### Starting the Web UI
 

@@ -37,8 +37,12 @@ class BagRecordingTests(unittest.TestCase):
         process = module.generate_launch_description().actions[0]
         command = process.kwargs["cmd"]
         self.assertEqual(command[:4], ["ros2", "bag", "record", "-a"])
-        self.assertEqual(command[4], "-o")
-        self.assertRegex(command[5], r"^/mnt/storage/bags/genbu_\d{8}_\d{6}_\d{6}$")
+        self.assertEqual(command[4:8], [
+            "--max-bag-size", "1000000000",
+            "--max-bag-duration", "3600",
+        ])
+        self.assertEqual(command[8], "-o")
+        self.assertRegex(command[9], r"^/mnt/storage/bags/genbu_\d{8}_\d{6}_\d{6}$")
 
 
 if __name__ == "__main__":
