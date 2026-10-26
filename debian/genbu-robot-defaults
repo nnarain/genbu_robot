@@ -9,3 +9,4 @@ GENBU_PIXI_ENV=robot
 # Feature flags (set to 'false' to disable)
 ENABLE_FOXGLOVE=true
 ENABLE_MEDKIT=true
+RECORD_BAG=false
