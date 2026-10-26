@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess
+from launch_ros.actions import Node
 
 
 MAX_BAG_SIZE_BYTES = 1_000_000_000
@@ -14,9 +14,12 @@ def generate_launch_description():
     output = Path("/mnt/storage/bags") / f"genbu_{timestamp}"
 
     return LaunchDescription([
-        ExecuteProcess(
-            cmd=[
-                "ros2", "bag", "record", "-a",
+        Node(
+            package="rosbag2_transport",
+            executable="record",
+            name="bag_recorder",
+            arguments=[
+                "-a",
                 "--max-bag-size", str(MAX_BAG_SIZE_BYTES),
                 "--max-bag-duration", str(MAX_BAG_DURATION_SECONDS),
                 "-o", str(output),
