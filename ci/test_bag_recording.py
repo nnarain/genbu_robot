@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 LAUNCH_FILE = (
     Path(__file__).resolve().parents[1]
-    / "genbu_bringup/launch/record_bag.launch.py"
+    / "genbu_reporting/launch/record_bag.launch.py"
 )
 
 
