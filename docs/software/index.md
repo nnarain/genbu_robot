@@ -120,6 +120,16 @@ Medkit is enabled by default. To disable it, set `ENABLE_MEDKIT=false` in `/etc/
 ENABLE_MEDKIT=false
 ```
 
+## Bag Recording
+
+Bag recording is disabled by default. To record all ROS topics to `/mnt/storage/bags`, set `RECORD_BAG=true` in `/etc/default/genbu-robot` and restart the robot service:
+
+```ini
+RECORD_BAG=true
+```
+
+Each service start creates a uniquely named bag directory under `/mnt/storage/bags`.
+
 ### Starting the Web UI
 
 The medkit gateway is started automatically by the `robot` systemd service (as part of `web.launch.xml`) and is accessible on port **8080**.

@@ -18,6 +18,7 @@
   <depend>genbu_reporting</depend>
   <depend>genbu_web</depend>
   <depend>genbu_ontology</depend>
+  <exec_depend>ros2bag</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
