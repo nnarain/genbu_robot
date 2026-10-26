@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ydlidar">
   <xacro:macro name="ydlidar" params="parent:=base_link xyz:='0 0 0' rpy:='0 0 0'">
   <!-- Mesh file for the RPLIDAR, used for visualization in RViz/Simulation. -->
-  <xacro:property name="mesh_file" value="file://$(find genbu_description)/meshes/rplidar_a1m8.dae"/>
+  <xacro:property name="mesh_file" value="package://genbu_description/meshes/rplidar_a1m8.dae"/>
 
     <!-- Base of the YDLidar (physical mount). No mesh available for this sensor. -->
     <link name="ydlidar_base_link">
