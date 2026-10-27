@@ -2,6 +2,7 @@
   <node pkg="diagnostic_aggregator" exec="aggregator_node" name="diagnostic_aggregator" output="screen">
     <param from="$(find-pkg-share genbu_reporting)/config/diagnostic_aggregator.yaml" />
   </node>
+  <node pkg="rosgraph_monitor" exec="rosgraph_monitor_node" name="rosgraph_monitor" output="screen" />
   <include file="$(find-pkg-share ros2_medkit_fault_manager)/launch/fault_manager.launch.py">
     <arg name="params_file" value="$(find-pkg-share genbu_reporting)/config/fault_manager.yaml" />
   </include>
