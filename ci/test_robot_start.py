@@ -79,7 +79,9 @@ class RobotStartTests(unittest.TestCase):
             [
                 "/usr/local/bin/pixi", "run", "--manifest-path",
                 str(self.workspace / "pixi.toml"), "-e", "robot",
-                "ros2", "launch", "genbu_bringup", "robot.launch.xml",
+                "/bin/bash", "-euo", "pipefail", "-c",
+                "set +u; source /etc/ros/setup.bash; set -u; "
+                "exec ros2 launch genbu_bringup robot.launch.xml",
             ],
         )
 

@@ -29,15 +29,10 @@ done
 
 cd "${GENBU_PIXI_DIR}"
 
-# Source the user customization hook. It may source other setup scripts that
-# reference unset variables, so nounset must be off while sourcing.
-set +u
-source /etc/ros/setup.bash
-set -u
-
-# pixi run installs/syncs the environment from pixi.lock on first start (and
-# after package updates that ship a new lock file), then launches the stack.
+# pixi run installs/syncs the environment from pixi.lock, then the hook adds
+# user workspaces on top of the activated Pixi environment before launch.
 exec /usr/local/bin/pixi run \
     --manifest-path "${GENBU_PIXI_DIR}/pixi.toml" \
     -e "${GENBU_PIXI_ENV}" \
-    ros2 launch genbu_bringup robot.launch.xml
+    /bin/bash -euo pipefail -c \
+    'set +u; source /etc/ros/setup.bash; set -u; exec ros2 launch genbu_bringup robot.launch.xml'
