@@ -11,6 +11,10 @@ diagnostic_aggregator:
         type: diagnostic_aggregator/GenericAnalyzer
         path: Sensors
         contains: ["ydlidar", "YDLidar", "Laser", "lidar"]
+      graph:
+        type: diagnostic_aggregator/GenericAnalyzer
+        path: Graph
+        contains: ["rosgraph"]
       others:
         type: diagnostic_aggregator/OtherAnalyzer
         path: Other

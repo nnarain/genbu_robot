@@ -23,6 +23,7 @@ ros-jazzy-genbu-simulator = "*"
 # ── build toolchain: WSL, and on-Pi source builds ───────────────────────────
 [feature.build.dependencies]
 ros-jazzy-ament-cmake = "*"
+ros-jazzy-ros2-generate-parameter-library = "*"
 cmake = "*"
 ninja = "*"
 compilers = "*"
@@ -44,4 +45,3 @@ robot     = { features = ["ros"],                 solve-group = "genbu" }
 build = "cd ../.. && colcon build --symlink-install --cmake-args -DBUILD_TESTING=OFF -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
 sim   = "cd ../.. && colcon build --symlink-install && . install/setup.sh && ros2 launch genbu_simulator sim_navigation.launch.xml"
 robot = "cd ../.. && colcon build --symlink-install && . install/setup.sh && ros2 launch genbu_bringup robot.launch.xml"
-
