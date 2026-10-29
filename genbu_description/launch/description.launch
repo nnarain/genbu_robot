@@ -1,7 +1,6 @@
 <launch>
   <arg name="use_sim_time" default="false"/>
   <arg name="use_hcdf" default="false"/>
-
   <include file="$(find-pkg-share genbu_hcdf)/launch/hcdf.launch"/>
 
   <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher" output="screen" if="$(var use_hcdf)">
